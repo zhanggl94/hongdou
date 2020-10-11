@@ -1,28 +1,28 @@
-import { Select } from 'antd';
-import React, { useEffect } from 'react';
-import intl from 'react-intl-universal';
-import constants from '../../../util/constants';
+import { Col, Row, Select } from 'antd';
+import React from 'react';
+import constants from '../../../utils/constants';
+import './style.less';
 
 const { Option } = Select;
 
 const HeaderView = (props) => {
-    const handleChangeLan = e => {
-        props.changeLan(e);
-        console.log(intl.get('LOGIN').USERNAME)
+    const handleChangeLang = e => {
+        props.changeLang(e);
     }
-    useEffect(()=>{
-        console.log('view effect')
-    })
 
     return (
-        <div>
-            <Select defaultValue={constants.language.find(item => item.key === 'zh').value}
-                onChange={handleChangeLan}>
-                {constants.language.map((item, index) =>
-                    <Option key={index} value={item.key}>{item.value}</Option>
-                )}
-            </Select>
-            {intl.get('LOGIN').USERNAME}
+        <div className='header'>
+            <Row>
+                <Col span={22}></Col>
+                <Col span={2}>
+                    <Select defaultValue={constants.language.find(item => item.key === (localStorage.getItem('lang-type') || 'zh')).value}
+                        onChange={handleChangeLang}>
+                        {constants.language.map((item, index) =>
+                            <Option key={index} value={item.key}>{item.value}</Option>
+                        )}
+                    </Select>
+                </Col>
+            </Row>
         </div>
     );
 }

@@ -1,6 +1,27 @@
 {
-    "LOGIN":{
-        "USERNAME":"UserName",
-        "PASSWORD":"Password"
+    "NotFound":{
+        "message":{
+            "noPage":"The page not found."
+        }
+    },
+    "Signin":{
+        "label":{
+            "username":"Username",
+            "password":"Password"
+        },
+        "message":{
+            "notNull":"{0} not null."
+        }
+    },
+    "Signup":{
+        "label":{
+            "username":"Username",
+            "password":"Password",
+            "confirmPassword":"ConfirmPassword"
+        },
+        "message":{
+            "notNull":"{0}不能为空。",
+            "notSame":"Inconsistent passwords"
+        }
     }
 }
