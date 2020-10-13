@@ -1,27 +1,35 @@
 {
-    "NotFound":{
-        "message":{
-            "noPage":"The page not found."
+    "HeaderView": {
+        "label": {
+            "signup": "signup",
+            "signin": "signin"
         }
     },
-    "Signin":{
-        "label":{
-            "username":"Username",
-            "password":"Password"
-        },
-        "message":{
-            "notNull":"{0} not null."
+    "NotFound": {
+        "message": {
+            "noPage": "The page not found."
         }
     },
-    "Signup":{
-        "label":{
-            "username":"Username",
-            "password":"Password",
-            "confirmPassword":"ConfirmPassword"
+    "SigninView": {
+        "label": {
+            "username": "Username",
+            "password": "Password",
+            "signin": "Signin"
         },
-        "message":{
-            "notNull":"{0}不能为空。",
-            "notSame":"Inconsistent passwords"
+        "message": {
+            "notNull": "{0} not null."
+        }
+    },
+    "SignupView": {
+        "label": {
+            "username": "Username",
+            "password": "Password",
+            "confirmPassword": "ConfirmPassword",
+            "signup": "Signup"
+        },
+        "message": {
+            "notNull": "{0} not null.",
+            "notSame": "Inconsistent passwords"
         }
     }
 }

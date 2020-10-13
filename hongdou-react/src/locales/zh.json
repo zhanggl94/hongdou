@@ -1,23 +1,31 @@
 {
+    "HeaderView": {
+        "label": {
+            "signup": "注册",
+            "signin": "登陆"
+        }
+    },
     "NotFound":{
         "message":{
             "noPage":"页面飞走了。"
         }
     },
-    "Signin":{
+    "SigninView":{
         "label":{
             "username":"用户名",
-            "password":"密码"
+            "password":"密码",
+            "signin": "登陆"
         },
         "message":{
             "notNull":"{0}不能为空。"
         }
     },
-    "Signup":{
+    "SignupView":{
         "label":{
             "username":"用户名",
             "password":"密码",
-            "confirmPassword":"确认密码"
+            "confirmPassword":"确认密码",
+            "signup":"注册"
         },
         "message":{
             "notNull":"{0}不能为空。",
