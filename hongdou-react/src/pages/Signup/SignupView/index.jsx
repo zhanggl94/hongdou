@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 
 import { getLabel, getMessage, replaceStr } from '../../../utils/util';
+import api from '../../../api';
 
 const layout = {
     labelCol: { span: 8 },
@@ -14,16 +15,21 @@ const tailLayout = {
 const SignupView = () => {
 
     const labels = getLabel('SignupView');
-    console.log(labels)
     const messages = getMessage('SignupView');
 
     const onFinish = values => {
-        console.log('Success:', values);
+        api.signupRequest(values).then(
+            data => {
+                console.log('success');
+            }, ({ resposne }) => {
+                console.log('error')
+            })
+
     };
 
-    const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
-    };
+    // const onFinishFailed = errorInfo => {
+    //     console.log('Failed:', errorInfo);
+    // };
 
     return (
         <Form
@@ -31,7 +37,7 @@ const SignupView = () => {
             name="basic"
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+            // onFinishFailed={onFinishFailed}
         >
             <Form.Item
                 label={labels.username}

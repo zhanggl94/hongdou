@@ -2,8 +2,8 @@ import express from 'express';
 
 const router = express.Router();
 
-router.get('/signup',(req,res)=>{
-    res.send('signup')
+router.post('/signup',(req,res)=>{
+    res.send('signup1')
 })
 
 export default router;

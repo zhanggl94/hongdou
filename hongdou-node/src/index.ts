@@ -3,8 +3,8 @@ import signupRouter from './routes/signup';
 
 const app = express();
 
-app.use(signupRouter);
+app.use('/api',signupRouter);
 
-app.listen(3030, () => {
-    console.log('node server start at 3030.');
+app.listen(3001, () => {
+    console.log('node server start at 3001.');
 });

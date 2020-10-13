@@ -117,6 +117,7 @@ checkBrowsers(paths.appPath, isInteractive)
       urls.lanUrlForConfig
     );
     const devServer = new WebpackDevServer(compiler, serverConfig);
+    // require('../src/setupProxy')(devServer); // 添加http-proxy-middleware用来解决跨域问题
     // Launch WebpackDevServer.
     devServer.listen(port, HOST, err => {
       if (err) {
