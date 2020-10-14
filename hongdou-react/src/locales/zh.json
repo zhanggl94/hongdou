@@ -31,5 +31,13 @@
             "notNull":"{0}不能为空。",
             "notSame":"密码不一致。"
         }
+    },
+    "Notification":{
+        "label":{
+            "success":"成功",
+            "info":"消息",
+            "warning":"警告",
+            "error":"错误"
+        }
     }
 }

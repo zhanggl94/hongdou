@@ -1,8 +1,7 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-
-import { getLabel, getMessage, replaceStr } from '../../../utils/util';
-import api from '../../../api';
+import constants from '../../../utils/constants';
+import { getLabel, getMessage, replaceStr, openNotification } from '../../../utils/util';
 
 const layout = {
     labelCol: { span: 8 },
@@ -12,24 +11,22 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-const SignupView = () => {
+const SignupView = (props) => {
 
     const labels = getLabel('SignupView');
     const messages = getMessage('SignupView');
 
     const onFinish = values => {
-        api.signupRequest(values).then(
-            data => {
-                console.log('success');
-            }, ({ resposne }) => {
-                console.log('error')
-            })
-
+        props.onFinish(values);
+        openNotification({
+            type: constants.notifiction.type.success,
+            description: '注册成功'
+        })
     };
 
-    // const onFinishFailed = errorInfo => {
-    //     console.log('Failed:', errorInfo);
-    // };
+    const onFinishFailed = message => {
+        console.log(message);
+    }
 
     return (
         <Form
@@ -37,7 +34,7 @@ const SignupView = () => {
             name="basic"
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            // onFinishFailed={onFinishFailed}
+            onFinishFailed={onFinishFailed}
         >
             <Form.Item
                 label={labels.username}
@@ -57,7 +54,7 @@ const SignupView = () => {
 
             <Form.Item
                 label={labels.confirmPassword}
-                name="confirm"
+                name="confirmPassword"
                 dependencies={['password']}
                 hasFeedback
                 rules={[

@@ -31,5 +31,13 @@
             "notNull": "{0} not null.",
             "notSame": "Inconsistent passwords"
         }
+    },
+    "Notification":{
+        "label":{
+            "success":"Success",
+            "info":"Info",
+            "warning":"Warning",
+            "error":"Error"
+        }
     }
 }
