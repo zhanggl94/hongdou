@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-
-import { getLabel, getMessage, replaceStr } from '../../../utils/util';
+import intl from 'react-intl-universal';
 
 const layout = {
     labelCol: { span: 8 },
@@ -12,10 +11,6 @@ const tailLayout = {
 };
 
 const SigninView = () => {
-
-    const labels = getLabel('SigninView');
-    console.log(labels)
-    const messages = getMessage('SigninView');
 
     const onFinish = values => {
         console.log('Success:', values);
@@ -34,24 +29,30 @@ const SigninView = () => {
             onFinishFailed={onFinishFailed}
         >
             <Form.Item
-                label={labels.username}
+                label={intl.get('SigninView_lbl_username')}
                 name="username"
-                rules={[{ required: true, message: replaceStr(messages.notNull, [labels.username]) }]}
+                rules={[{
+                    required: true,
+                    message: intl.get('SigninView_msg_notNull', { param: intl.get('SigninView_lbl_username') })
+                }]}
             >
                 <Input />
             </Form.Item>
 
             <Form.Item
-                label={labels.password}
+                label={intl.get('SigninView_lbl_password')}
                 name="password"
-                rules={[{ required: true, message: replaceStr(messages.notNull, [labels.password]) }]}
+                rules={[{
+                    required: true,
+                    message: intl.get('SigninView_msg_notNull', { param: intl.get('SigninView_lbl_password') })
+                }]}
             >
                 <Input.Password />
             </Form.Item>
 
             <Form.Item {...tailLayout}>
                 <Button type="primary" htmlType="submit">
-                    {labels.signin}
+                    {intl.get('SigninView_lbl_signin')}
                 </Button>
             </Form.Item>
         </Form>

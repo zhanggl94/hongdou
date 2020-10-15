@@ -1,43 +1,21 @@
 {
-    "HeaderView": {
-        "label": {
-            "signup": "signup",
-            "signin": "signin"
-        }
-    },
-    "NotFound": {
-        "message": {
-            "noPage": "The page not found."
-        }
-    },
-    "SigninView": {
-        "label": {
-            "username": "Username",
-            "password": "Password",
-            "signin": "Signin"
-        },
-        "message": {
-            "notNull": "{0} not null."
-        }
-    },
-    "SignupView": {
-        "label": {
-            "username": "Username",
-            "password": "Password",
-            "confirmPassword": "ConfirmPassword",
-            "signup": "Signup"
-        },
-        "message": {
-            "notNull": "{0} not null.",
-            "notSame": "Inconsistent passwords"
-        }
-    },
-    "Notification":{
-        "label":{
-            "success":"Success",
-            "info":"Info",
-            "warning":"Warning",
-            "error":"Error"
-        }
-    }
+    "HeaderView_lbl_signup": "signup",
+    "HeaderView_lbl_signin": "signin",
+    "NotFound_msg_noPage": "The page not found.",
+    "SigninView_lbl_username": "Username",
+    "SigninView_lbl_password": "Password",
+    "SigninView_lbl_signin": "Signin",
+    "SigninView_msg_notNull": "{param} not null.",
+    "SignupView_lbl_username": "Username",
+    "SignupView_lbl_password": "Password",
+    "SignupView_lbl_confirmPassword": "ConfirmPassword",
+    "SignupView_lbl_signup": "Signup",
+    "SignupView_msg_notNull": "{param} not null.",
+    "SignupView_msg_notSame": "Inconsistent passwords.",
+    "SignupView_msg_sign_success": "User signup success.",
+    "SignupView_msg_sign_failed": "User signup failed.",
+    "Notification_lbl_success": "Success",
+    "Notification_lbl_info": "Info",
+    "Notification_lbl_warning": "Warning",
+    "Notification_lbl_error": "Error"
 }

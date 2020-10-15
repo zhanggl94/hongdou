@@ -1,43 +1,21 @@
 {
-    "HeaderView": {
-        "label": {
-            "signup": "注册",
-            "signin": "登陆"
-        }
-    },
-    "NotFound":{
-        "message":{
-            "noPage":"页面飞走了。"
-        }
-    },
-    "SigninView":{
-        "label":{
-            "username":"用户名",
-            "password":"密码",
-            "signin": "登陆"
-        },
-        "message":{
-            "notNull":"{0}不能为空。"
-        }
-    },
-    "SignupView":{
-        "label":{
-            "username":"用户名",
-            "password":"密码",
-            "confirmPassword":"确认密码",
-            "signup":"注册"
-        },
-        "message":{
-            "notNull":"{0}不能为空。",
-            "notSame":"密码不一致。"
-        }
-    },
-    "Notification":{
-        "label":{
-            "success":"成功",
-            "info":"消息",
-            "warning":"警告",
-            "error":"错误"
-        }
-    }
+    "HeaderView_lbl_signup": "注册",
+    "HeaderView_lbl_signin": "登陆",
+    "NotFound_msg_noPage": "页面飞走了。",
+    "SigninView_lbl_username": "用户名",
+    "SigninView_lbl_password": "密码",
+    "SigninView_lbl_signin": "登陆",
+    "SigninView_msg_notNull": "{param}不能为空。",
+    "SignupView_lbl_username": "用户名",
+    "SignupView_lbl_password": "密码",
+    "SignupView_lbl_confirmPassword": "确认密码",
+    "SignupView_lbl_signup": "注册",
+    "SignupView_msg_notNull": "{param}不能为空。",
+    "SignupView_msg_notSame": "密码不一致。",
+    "SignupView_msg_sign_success": "用户注册成功。",
+    "SignupView_msg_sign_failed": "用户注册失败。",
+    "Notification_lbl_success": "成功",
+    "Notification_lbl_info": "消息",
+    "Notification_lbl_warning": "警告",
+    "Notification_lbl_error": "错误"
 }

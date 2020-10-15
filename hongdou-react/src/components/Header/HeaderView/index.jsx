@@ -1,8 +1,8 @@
 import { Button, Col, Row, Select } from 'antd';
 import React from 'react';
+import intl from 'react-intl-universal';
 import constants from '../../../utils/constants';
 import './style.less';
-import { getLabel } from '../../../utils/util';
 
 const { Option } = Select;
 
@@ -16,10 +16,10 @@ const HeaderView = (props) => {
             <Row>
                 <Col span={18}></Col>
                 <Col span={2}>
-                    <Button size='small' href='/signin'>{getLabel('HeaderView').signin}</Button>
+                    <Button size='small' href='/signin'>{intl.get('HeaderView_lbl_signin')}</Button>
                 </Col>
                 <Col span={2}>
-                    <Button size='small' href='/signup'>{getLabel('HeaderView').signup}</Button>
+                    <Button size='small' href='/signup'>{intl.get('HeaderView_lbl_signup')}</Button>
                 </Col>
                 <Col span={2}>
                     <Select defaultValue={constants.language.find(item => item.key === (localStorage.getItem('lang-type') || 'zh')).value}
