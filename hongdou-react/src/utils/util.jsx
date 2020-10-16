@@ -1,5 +1,4 @@
 import { notification } from 'antd';
-import intl from 'react-intl-universal';
 import constants from './constants';
 
 /**

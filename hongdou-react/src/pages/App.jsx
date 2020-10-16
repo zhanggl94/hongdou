@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Spin } from 'antd';
 import Header from '../components/Header';
 import intl from 'react-intl-universal';
+import { connect } from 'react-redux';
 
 const currLanguage = localStorage.getItem('lang-type') || 'zh';
 
@@ -27,17 +29,25 @@ function App(props) {
    * @param {*} lang 所选语言
    */
   const handlChangeLang = lang => {
-    localStorage.setItem('lang-type',lang);
+    localStorage.setItem('lang-type', lang);
     window.location.reload();
   }
 
+  console.log('appprops', props);
   return (
-    lanInitDone &&
-    <div>
+  lanInitDone &&
+    <Spin spinning={props.loadingStatus}>
       <Header changeLang={handlChangeLang} />
       {props.children}
-    </div>
+    </Spin>
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  console.log('app', state);
+  return {
+    loadingStatus: state.loadingStatus
+  }
+}
+
+export default connect(mapStateToProps, null)(App);

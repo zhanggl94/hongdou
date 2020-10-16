@@ -1,39 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import intl from 'react-intl-universal';
 import { withRouter } from 'react-router-dom';
 import SignupView from './SignupView';
 import api from '../../api';
 import constants from '../../utils/constants';
 import { openNotification } from '../../utils/util';
+import spinLoading from '../../store/actions/loadingAciton';
+import { bindActionCreators } from 'redux';
 
 const Signup = (props) => {
 
-    const [loading, setLoading] = useState(false);
-
     const handleSubmit = values => {
         console.log('hand', values)
-        setLoading(true);
+        props.spinLoading(true);//loading开始
         // 用户注册
         api.signupRequest(values)
             .then(
                 data => {
-                    setLoading(false);
-                    if (data.error) {
-                        openNotification({
-                            type: constants.notifiction.type.error,
-                            message: intl.get('SignupView_msg_sign_failed')
-                        });
-                        console.error(data.error);
-                    } else {
+                    console.log('data',data)
+                    props.spinLoading(false);//loading结束
+                    if (data.isOk) {
                         openNotification({
                             type: constants.notifiction.type.success,
-                            message: intl.get('SignupView_msg_sign_success')
+                            message: intl.get('SignupView_msg_sign_success') + data.message
                         });
                         props.history.push('/');
+
+                    } else {
+                        openNotification({
+                            type: constants.notifiction.type.error,
+                            message: intl.get('SignupView_msg_sign_failed') + data.message
+                        });
+                        console.error(data.error);
                     }
                 }
             ).catch(error => {
-                setLoading(false);
+                props.spinLoading(false);//loading结束
                 console.error(error);
                 openNotification({
                     type: constants.notifiction.type.error,
@@ -43,8 +46,20 @@ const Signup = (props) => {
     }
 
     return (
-        <SignupView onFinish={handleSubmit} loading={loading} />
+        <SignupView onFinish={handleSubmit} />
     );
 }
 
-export default withRouter(Signup);
+const mapStatusToProps = state => {
+    return {
+        loadingStatus: state.loadingStatus
+    };
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        spinLoading: bindActionCreators(spinLoading, dispatch)
+    }
+}
+
+export default connect(mapStatusToProps, mapDispatchToProps)(withRouter(Signup));
