@@ -1,7 +1,7 @@
 export default {
-    host:'',
+    host:'localhost',
     port:3306,
-    username:'',
-    password:'',
-    database:''
+    username:'root',
+    password:'1qaz!QAZ',
+    database:'hongdou'
 }

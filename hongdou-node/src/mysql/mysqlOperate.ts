@@ -31,7 +31,7 @@ class MySqlOperate {
     public querySql = (sql: string, paramList: any, callback: queryCallback) => {
         this.connection.query(sql, paramList, (error, data) => {
             if (error) {
-                console.log(`Query sql failed.error:${error}`);
+                console.log(`Query sql failed.${error}`);
                 callback(error, null);
             } else {
                 callback(null, data);
@@ -41,9 +41,9 @@ class MySqlOperate {
 
     public endmysql = () => {
         this.connection.end((error?: MysqlError) => {
-            if(error){
-                console.log(`End mysql failed.error:${error}`);
-            }else{
+            if (error) {
+                console.log(`End mysql failed.${error}`);
+            } else {
                 console.log(`End mysql success.`);
             }
         })
