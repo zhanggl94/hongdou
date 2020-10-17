@@ -5,19 +5,37 @@ const router = express.Router();
 router.post('/signup', (req: Request, res: Response) => {
     let result = { isOk: true, error: {}, message: '' };
     const mysql = new MySqlOperate();
-    result = isUserExist(req, mysql);
-    console.log(result);
-    if (!result.isOk) {
-        res.status(400).send(result);
-    } else {
-        let httpCode = 400;
-        result = createUser(req, mysql);
-        if (result.isOk) {
-            httpCode = 200;
-        }
-        res.status(httpCode).send(result);
-    }
-    mysql.endmysql();
+    isUserExist(req, mysql).then(data => { // 判断用户是否重复
+        return new Promise((resolve, reject) => {
+            result = data;
+            if (!result.isOk) {
+                mysql.endmysql();
+                res.status(400).send(result);
+                reject(result);
+            } else {
+                if (result.isOk) {
+                    resolve(result);
+                } else {
+                    mysql.endmysql();
+                    reject(result);
+                }
+            }
+        })
+    }).then(data => {
+        createUser(req, mysql).then(data => { // 创建用户
+            mysql.endmysql();
+            result = data;
+            let httpCode = 400;
+            if (result.isOk) {
+                httpCode = 200;
+            }
+            res.status(httpCode).send(result);
+        }, error => {
+            result = error;
+            mysql.endmysql();
+            res.status(400).send(result);
+        });
+    });
 });
 
 /**
@@ -26,28 +44,26 @@ router.post('/signup', (req: Request, res: Response) => {
  * @param res 
  * @param mysql 
  */
-const isUserExist = (req: Request, mysql: MySqlOperate): any => {
+const isUserExist = async (req: Request, mysql: MySqlOperate) => {
     const result = {
         isOk: true,
         error: {},
         message: ''
     }
-    const sql = `select id from user where username = "?" `;
-    const paramList = [req.body.username];
-    mysql.querySql(sql, paramList, (error: any, data: any) => {
-        if (error) {
-            console.log(`Query user error.${error}`);
+    const sql = `select * from user where username = ?`;
+    const paramList: Array<string> = [req.body.username];
+    await mysql.querySql(sql, paramList).then((data: any) => {
+        if (data.length) {
             result.isOk = false;
-            result.error = error;
-            result.message = 'There has some system errors.';
-        } else {
-            if (data.affectedRows) {
-                result.isOk = false;
-                result.message = 'The user has regisited.';
-            }
+            result.message = 'The user has regisited.';
         }
-        return result;
+    }, (error: any) => {
+        console.log(`Query user error.${error}`);
+        result.isOk = false;
+        result.error = error;
+        result.message = 'Query user error.';
     });
+    return result;
 }
 
 
@@ -57,7 +73,7 @@ const isUserExist = (req: Request, mysql: MySqlOperate): any => {
  * @param res 响应
  * @param mysql 数据库操作对象
  */
-const createUser = (req: Request, mysql: MySqlOperate): any => {
+const createUser = async (req: Request, mysql: MySqlOperate) => {
     const result = {
         isOk: true,
         error: {},
@@ -65,19 +81,17 @@ const createUser = (req: Request, mysql: MySqlOperate): any => {
     }
     const sql = `insert into user values(null,?,?)`;
     const paramList = [req.body.username, req.body.password];
-    mysql.querySql(sql, paramList, (error: any, data: any) => {
-        if (error) {
+    await mysql.querySql(sql, paramList).then((data: any) => {
+        if (!data.affectedRows) {
             result.isOk = false;
-            result.error = error;
-            result.message = 'There has some system errors.';
-        } else {
-            if (!data.affectedRows) {
-                result.isOk = false;
-                result.message = 'Create user in db failed.';
-            }
+            result.message = 'Create user in db failed.';
         }
-        return result;
+    }, (error) => {
+        result.isOk = false;
+        result.error = error;
+        result.message = 'Create user in db failed.';
     });
+    return result;
 }
 
 export default router;

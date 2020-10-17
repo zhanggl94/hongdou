@@ -28,14 +28,17 @@ class MySqlOperate {
         return connection;
     }
 
-    public querySql = (sql: string, paramList: any, callback: queryCallback) => {
-        this.connection.query(sql, paramList, (error, data) => {
-            if (error) {
-                console.log(`Query sql failed.${error}`);
-                callback(error, null);
-            } else {
-                callback(null, data);
-            }
+    public querySql = (sql: string, paramList: Array<string>) => {
+        console.log(sql,paramList)
+        return new Promise((resolve: any, reject: any) => {
+            this.connection.query(sql, paramList, (error, data) => {
+                if (error) {
+                    console.log(`Query sql failed.${error}`);
+                    reject(error);
+                } else {
+                    resolve(data);
+                }
+            })
         })
     }
 
