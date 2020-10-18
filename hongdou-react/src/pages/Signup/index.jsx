@@ -12,13 +12,11 @@ import { bindActionCreators } from 'redux';
 const Signup = (props) => {
 
     const handleSubmit = values => {
-        console.log('hand', values)
         props.spinLoading(true);//loading开始
         // 用户注册
         api.signupRequest(values)
             .then(
                 data => {
-                    console.log('data',data)
                     props.spinLoading(false);//loading结束
                     if (data.isOk) {
                         openNotification({
@@ -50,11 +48,11 @@ const Signup = (props) => {
     );
 }
 
-const mapStatusToProps = state => {
-    return {
-        loadingStatus: state.loadingStatus
-    };
-}
+// const mapStatusToProps = state => {
+//     return {
+//         loadingStatus: state.loadingStatus
+//     };
+// }
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -62,4 +60,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStatusToProps, mapDispatchToProps)(withRouter(Signup));
+export default connect(null, mapDispatchToProps)(withRouter(Signup));

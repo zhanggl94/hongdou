@@ -33,7 +33,6 @@ function App(props) {
     window.location.reload();
   }
 
-  console.log('appprops', props);
   return (
   lanInitDone &&
     <Spin spinning={props.loadingStatus}>
@@ -44,7 +43,6 @@ function App(props) {
 }
 
 const mapStateToProps = state => {
-  console.log('app', state);
   return {
     loadingStatus: state.loadingStatus
   }

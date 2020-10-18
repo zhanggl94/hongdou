@@ -10,14 +10,13 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-const SigninView = () => {
+const SigninView = (props) => {
 
     const onFinish = values => {
-        console.log('Success:', values);
+        props.onSubmit(values);
     };
 
     const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
     };
 
     return (

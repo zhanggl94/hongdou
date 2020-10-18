@@ -6,6 +6,8 @@
     "SigninView_lbl_password": "Password",
     "SigninView_lbl_signin": "Signin",
     "SigninView_msg_notNull": "{param} not null.",
+    "SigninView_msg_signin_success": "User sigin success.",
+    "SigninView_msg_signin_failed": "User sigin failed.",
     "SignupView_lbl_username": "Username",
     "SignupView_lbl_password": "Password",
     "SignupView_lbl_confirmPassword": "ConfirmPassword",

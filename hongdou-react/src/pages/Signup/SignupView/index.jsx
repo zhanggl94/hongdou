@@ -17,7 +17,6 @@ const SignupView = (props) => {
     };
 
     const onFinishFailed = message => {
-        console.log('finished', message);
     }
 
     return (

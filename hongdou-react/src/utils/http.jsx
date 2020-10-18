@@ -6,7 +6,8 @@ export const postData = (url, data) => fetch(url, {
     method: 'post',
     headers: {
         'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'jwtToken':'test'
     },
     body: qs.stringify(data)
 }).then(res => res.json());

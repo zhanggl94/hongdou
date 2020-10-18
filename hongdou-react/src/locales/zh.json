@@ -6,6 +6,8 @@
     "SigninView_lbl_password": "密码",
     "SigninView_lbl_signin": "登陆",
     "SigninView_msg_notNull": "{param}不能为空。",
+    "SigninView_msg_signin_success": "用户登陆成功。",
+    "SigninView_msg_signin_failed": "用户登陆失败。",
     "SignupView_lbl_username": "用户名",
     "SignupView_lbl_password": "密码",
     "SignupView_lbl_confirmPassword": "确认密码",
