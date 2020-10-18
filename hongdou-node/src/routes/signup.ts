@@ -50,7 +50,7 @@ const isUserExist = async (req: Request, mysql: MySqlOperate) => {
         error: {},
         message: ''
     }
-    const sql = `select * from user where username = ?`;
+    const sql = `select id from user where username = ?`;
     const paramList: Array<string> = [req.body.username];
     await mysql.querySql(sql, paramList).then((data: any) => {
         if (data.length) {
