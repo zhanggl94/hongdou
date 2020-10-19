@@ -1,0 +1,1 @@
+export const formatDateHour24 = (date: Date, timeZone: string): string => date.toLocaleString(timeZone, { hour12: false });
