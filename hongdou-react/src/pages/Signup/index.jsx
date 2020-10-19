@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import SignupView from './SignupView';
 import api from '../../api';
 import constants from '../../utils/constants';
-import { openNotification } from '../../utils/util';
+import { openNotification, setJwtToken } from '../../utils/util';
 import spinLoading from '../../store/actions/loadingAciton';
 import { bindActionCreators } from 'redux';
 
@@ -19,12 +19,12 @@ const Signup = (props) => {
                 data => {
                     props.spinLoading(false);//loading结束
                     if (data.isOk) {
+                        setJwtToken(data.jwtToken)
                         openNotification({
                             type: constants.notifiction.type.success,
                             message: intl.get('SignupView_msg_sign_success') + data.message
                         });
                         props.history.push('/');
-
                     } else {
                         openNotification({
                             type: constants.notifiction.type.error,

@@ -23,3 +23,11 @@ export const openNotification = ({ type, message, placement }) => {
         placement
     })
 }
+
+export const setJwtToken = token =>{
+    localStorage.setItem('jwtToken',token);
+}
+
+export const clearJwtToken = ()=>{
+    localStorage.removeItem('jwtToken');
+}
