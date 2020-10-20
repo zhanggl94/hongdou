@@ -5,31 +5,32 @@ class MySqlOperate {
     private connection: Connection;
 
     constructor() {
-        this.connection = this.connectmysql();
-    }
-
-    private connectmysql = (): Connection => {
-        const connection: Connection = mysql.createConnection({
+        this.connection = mysql.createConnection({
             host: mysqlConfig.host,
             port: mysqlConfig.port,
             user: mysqlConfig.username,
             password: mysqlConfig.password,
             database: mysqlConfig.database
         });
+    }
 
-        connection.connect((error: MysqlError) => {
-            if (error) {
-                console.log(`Connect mysql failed. error${error}`);
-            } else {
-                console.log('Connect mysql success.')
-            }
+    public connectmysql = () => {
+        return new Promise((resolve, reject) => {
+            this.connection.connect((error: MysqlError) => {
+                if (error) {
+                    console.log(`Connect mysql failed. error${error}`);
+                    reject(error);
+                } else {
+                    console.log('Connect mysql success.')
+                    resolve();
+                }
 
+            })
         })
-        return connection;
     }
 
     public querySql = (sql: string, paramList: Array<string>) => {
-        console.log(sql,paramList)
+        console.log(sql, paramList)
         return new Promise((resolve: any, reject: any) => {
             this.connection.query(sql, paramList, (error, data) => {
                 if (error) {
