@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 import intl from 'react-intl-universal';
 import SigninView from './SigninView';
 import spinLoading from '../../store/actions/loadingAciton';
-import signinRequest from '../../api/signin';
-import { openNotification } from '../../utils/util';
+import api from '../../api';
+import { openNotification, setJWTToken } from '../../utils/util';
 import constants from '../../utils/constants';
 
 const Signin = (props) => {
 
     const handleSubmit = data => {
         props.spinLoading(true);
-        signinRequest(data).then(
+        api.signinRequest(data).then(
             data => {
                 props.spinLoading(false);
                 if (data.isOk) {
@@ -21,6 +21,7 @@ const Signin = (props) => {
                         type: constants.notifiction.type.success,
                         message: intl.get('SigninView_msg_signin_success')
                     });
+                    setJWTToken(data.token);
                     props.history.push('/');
                 } else {
                     openNotification({

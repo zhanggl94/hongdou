@@ -1,4 +1,5 @@
 {
+    "Auth_msg_need_signin":"You have not signin, please login first.",
     "HeaderView_lbl_signup": "signup",
     "HeaderView_lbl_signin": "signin",
     "NotFound_msg_noPage": "The page not found.",

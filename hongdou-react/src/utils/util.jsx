@@ -6,6 +6,7 @@ import constants from './constants';
  * @param {*} param0 
  */
 export const openNotification = ({ type, message, placement }) => {
+    console.log('open', message)
     const types = constants.notifiction.type;
     const placements = constants.notifiction.placement;
     const typeList = [types.success, types.info, types.warning, types.error];
@@ -24,10 +25,8 @@ export const openNotification = ({ type, message, placement }) => {
     })
 }
 
-export const setJwtToken = token =>{
-    localStorage.setItem('jwtToken',token);
-}
+export const setJWTToken = token => localStorage.setItem('jwtToken', token);
 
-export const clearJwtToken = ()=>{
-    localStorage.removeItem('jwtToken');
-}
+export const getJWTToken = () => localStorage.getItem('jwtToken');
+
+export const clearJWT = () => localStorage.removeItem('jwtToken');

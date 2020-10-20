@@ -1,4 +1,5 @@
 {
+    "Auth_msg_need_signin":"您还没有登陆，请先登陆。",
     "HeaderView_lbl_signup": "注册",
     "HeaderView_lbl_signin": "登陆",
     "NotFound_msg_noPage": "页面飞走了。",
