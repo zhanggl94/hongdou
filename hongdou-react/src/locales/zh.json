@@ -2,6 +2,7 @@
     "Auth_msg_need_signin":"您还没有登陆，请先登陆。",
     "HeaderView_lbl_signup": "注册",
     "HeaderView_lbl_signin": "登陆",
+    "HeaderView_lbl_signout": "登出",
     "NotFound_msg_noPage": "页面飞走了。",
     "SigninView_lbl_username": "用户名",
     "SigninView_lbl_password": "密码",

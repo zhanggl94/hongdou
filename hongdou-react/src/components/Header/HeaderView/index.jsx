@@ -3,7 +3,6 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
 import constants from '../../../utils/constants';
-import { getJWTToken } from '../../../utils/util';
 import './style.less';
 
 const { Option } = Select;
@@ -14,17 +13,19 @@ const HeaderView = (props) => {
     }
 
     let userOperation;
-    if (getJWTToken()) {
-        console.log('1',getJWTToken());
+    if (props.auth.isAuth) {
         userOperation = (
-            <span className='header-conten'><Link to='/userinfo'>Username</Link></span>
+            <>
+                <span className='header-content'><Link to='/userinfo'>{props.auth.user.username}</Link></span>
+                <span className='header-content'><Button type='link' onClick={props.clearUser}>{intl.get('HeaderView_lbl_signout')}</Button></span>
+            </>
         );
     } else {
-        console.log('2',getJWTToken());
         userOperation = (
             <>
                 <span className='header-content'><Button size='small' href='/signin'>{intl.get('HeaderView_lbl_signin')}</Button></span>
-                <span className='header-content'><Button size='small' href='/signup'>{intl.get('HeaderView_lbl_signup')}</Button></span></>
+                <span className='header-content'><Button size='small' href='/signup'>{intl.get('HeaderView_lbl_signup')}</Button></span>
+            </>
         );
     }
 
@@ -44,23 +45,6 @@ const HeaderView = (props) => {
                     </Select>
                 </span>
             </div>
-            {/* <Row>
-                <Col span={18}></Col>
-                <Col span={2}>
-                    <Button size='small' href='/signin'>{intl.get('HeaderView_lbl_signin')}</Button>
-                </Col>
-                <Col span={2}>
-                    <Button size='small' href='/signup'>{intl.get('HeaderView_lbl_signup')}</Button>
-                </Col>
-                <Col span={2}>
-                    <Select defaultValue={constants.language.find(item => item.key === (localStorage.getItem('lang-type') || 'zh')).value}
-                        onChange={handleChangeLang}>
-                        {constants.language.map((item, index) =>
-                            <Option key={index} value={item.key}>{item.value}</Option>
-                        )}
-                    </Select>
-                </Col>
-            </Row> */}
         </div>
     );
 }

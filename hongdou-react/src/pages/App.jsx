@@ -34,7 +34,7 @@ function App(props) {
   }
 
   return (
-  lanInitDone &&
+    lanInitDone &&
     <Spin spinning={props.loadingStatus}>
       <Header changeLang={handlChangeLang} />
       {props.children}
@@ -42,9 +42,9 @@ function App(props) {
   );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ loadingStatus }) => {
   return {
-    loadingStatus: state.loadingStatus
+    loadingStatus
   }
 }
 

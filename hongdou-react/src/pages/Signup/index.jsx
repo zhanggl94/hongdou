@@ -1,13 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import intl from 'react-intl-universal';
+import jwtDecode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
 import SignupView from './SignupView';
 import api from '../../api';
 import constants from '../../utils/constants';
 import { openNotification, setJWTToken } from '../../utils/util';
-import spinLoading from '../../store/actions/loadingAciton';
-import { bindActionCreators } from 'redux';
 
 const Signup = (props) => {
 
@@ -19,7 +17,8 @@ const Signup = (props) => {
                 data => {
                     props.spinLoading(false);//loading结束
                     if (data.isOk) {
-                        setJWTToken(data.jwtToken)
+                        setJWTToken(data.jwtToken);
+                        props.setUser(jwtDecode(data.jwtToken));
                         openNotification({
                             type: constants.notifiction.type.success,
                             message: intl.get('SignupView_msg_sign_success') + data.message
@@ -48,16 +47,4 @@ const Signup = (props) => {
     );
 }
 
-// const mapStatusToProps = state => {
-//     return {
-//         loadingStatus: state.loadingStatus
-//     };
-// }
-
-const mapDispatchToProps = dispatch => {
-    return {
-        spinLoading: bindActionCreators(spinLoading, dispatch)
-    }
-}
-
-export default connect(null, mapDispatchToProps)(withRouter(Signup));
+export default withRouter(Signup);

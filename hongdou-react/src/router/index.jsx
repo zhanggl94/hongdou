@@ -8,6 +8,7 @@ import Signin from '../pages/Signin';
 import Signup from '../pages/Signup';
 import Auth from '../components/HOC/Auth';
 import CarBill from '../pages/CarBill';
+import CommonProps from '../components/HOC/CommonProps';
 
 const Routers = () => {
     return (
@@ -15,9 +16,9 @@ const Routers = () => {
             <App path='/'>
                 <Switch>
                     <Route exact path='/' component={Home}></Route>
-                    <Route path='/signup' component={Signup}></Route>
-                    <Route path='/signin' component={Signin}></Route>
-                    <Route path='/carbill' component={Auth(CarBill)}></Route>
+                    <Route path='/signup' component={CommonProps(Signup)}></Route>
+                    <Route path='/signin' component={CommonProps(Signin)}></Route>
+                    <Route path='/carbill' component={Auth(CommonProps(CarBill))}></Route>
                     <Route path='*' component={NotFound}></Route>
                 </Switch>
             </App>

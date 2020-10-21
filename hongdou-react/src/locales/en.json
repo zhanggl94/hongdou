@@ -2,6 +2,7 @@
     "Auth_msg_need_signin":"You have not signin, please login first.",
     "HeaderView_lbl_signup": "signup",
     "HeaderView_lbl_signin": "signin",
+    "HeaderView_lbl_signout": "signout",
     "NotFound_msg_noPage": "The page not found.",
     "SigninView_lbl_username": "Username",
     "SigninView_lbl_password": "Password",

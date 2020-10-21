@@ -1,10 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import intl from 'react-intl-universal';
+import jwtDecode from 'jwt-decode';
 import SigninView from './SigninView';
-import spinLoading from '../../store/actions/loadingAciton';
 import api from '../../api';
 import { openNotification, setJWTToken } from '../../utils/util';
 import constants from '../../utils/constants';
@@ -22,6 +20,7 @@ const Signin = (props) => {
                         message: intl.get('SigninView_msg_signin_success')
                     });
                     setJWTToken(data.token);
+                    props.setUser(jwtDecode(data.token));
                     props.history.push('/');
                 } else {
                     openNotification({
@@ -44,16 +43,4 @@ const Signin = (props) => {
     );
 }
 
-// const mapStateToProps = state => {
-//     return {
-//         laodingStatus: state.loadingStatus
-//     }
-// }
-
-const mapDispatchToProps = dispatch => {
-    return {
-        spinLoading: bindActionCreators(spinLoading, dispatch)
-    }
-}
-
-export default connect(null, mapDispatchToProps)(withRouter(Signin));
+export default withRouter(Signin);

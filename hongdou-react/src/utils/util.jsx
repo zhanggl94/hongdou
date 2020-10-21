@@ -29,4 +29,4 @@ export const setJWTToken = token => localStorage.setItem('jwtToken', token);
 
 export const getJWTToken = () => localStorage.getItem('jwtToken');
 
-export const clearJWT = () => localStorage.removeItem('jwtToken');
+export const clearJWTToken = () => localStorage.removeItem('jwtToken');
