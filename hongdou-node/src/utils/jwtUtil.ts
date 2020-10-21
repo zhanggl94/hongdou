@@ -1,14 +1,15 @@
 import jwt from 'jsonwebtoken';
-import tokenSecret from '../config/tokenSecret';
+import tokenConfig from '../config/token';
 
 export const createToken = (payload: any) => {
-    payload.ctime = Date.now();
-    return jwt.sign(payload, tokenSecret);
+    payload.iat = Date.now();
+    payload.exp = Math.floor(Date.now() / 1000) + tokenConfig.exp_time;
+    return jwt.sign(payload, tokenConfig.secret);
 }
 
 export const verifyToken = (token: string) => {
     return new Promise((resolve, reject) => {
-        jwt.verify(token, tokenSecret, (err, data) => {
+        jwt.verify(token, tokenConfig.secret, (err, data) => {
             if (err) {
                 reject(err);
             } else {
