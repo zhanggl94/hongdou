@@ -18,7 +18,7 @@ const Routers = () => {
                     <Route exact path='/' component={Home}></Route>
                     <Route path='/signup' component={CommonProps(Signup)}></Route>
                     <Route path='/signin' component={CommonProps(Signin)}></Route>
-                    <Route path='/carbill' component={Auth(CommonProps(CarBill))}></Route>
+                    <Route exact path='/carbill' component={Auth(CommonProps(CarBill))}></Route>
                     <Route path='*' component={NotFound}></Route>
                 </Switch>
             </App>

@@ -21,5 +21,8 @@
     "Notification_lbl_success": "成功",
     "Notification_lbl_info": "消息",
     "Notification_lbl_warning": "警告",
-    "Notification_lbl_error": "错误"
+    "Notification_lbl_error": "错误",
+    "CarView_lbl_Car":"汽车",
+    "CarView_lbl_BillType":"消费种类",
+    "CarView_lbl_Bill":"账单"
 }

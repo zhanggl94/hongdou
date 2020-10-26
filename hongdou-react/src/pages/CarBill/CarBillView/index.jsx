@@ -1,52 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import intl from 'react-intl-universal';
 import { Layout, Menu, Breadcrumb } from 'antd';
 import './style.less';
-import {
-    DesktopOutlined,
-    PieChartOutlined,
-    FileOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
+import constants from '../../../utils/constants';
 
+const { Content, Footer, Sider } = Layout;
 
-const CarBillView = () => {
+const CarBillView = props => {
+
+    const handleMenuItemClick = component => {
+        props.handleMenuItemClick(component);
+    }
+
+    console.log(props.content)
+
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible >
                 <div className="logo" />
-                <Menu theme="#8cc9fc" defaultSelectedKeys={['1']} mode="inline">
-                    <Menu.Item key="1" icon={<PieChartOutlined />}>
-                        Option 1
+                <Menu theme="dark" defaultSelectedKeys={['car']} mode="inline">
+                    <Menu.Item key="car" className='iconfont icon-car'
+                        onClick={handleMenuItemClick.bind(this, constants.component_CarList)}>
+                        {intl.get('CarView_lbl_Car')}
                     </Menu.Item>
-                    <Menu.Item key="2" icon={<DesktopOutlined />}>
-                        Option 2
+                    <Menu.Item key="BillType" className='iconfont icon-tubiao'>
+                        {intl.get('CarView_lbl_BillType')}
                     </Menu.Item>
-                    <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-                        <Menu.Item key="3">Tom</Menu.Item>
-                        <Menu.Item key="4">Bill</Menu.Item>
-                        <Menu.Item key="5">Alex</Menu.Item>
-                    </SubMenu>
-                    <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-                        <Menu.Item key="6">Team 1</Menu.Item>
-                        <Menu.Item key="8">Team 2</Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="9" icon={<FileOutlined />}>
-                        Files
+                    <Menu.Item key="Bill" className='iconfont icon-zhangdan'>
+                        {intl.get('CarView_lbl_Bill')}
                     </Menu.Item>
                 </Menu>
             </Sider>
             <Layout className="site-layout">
-                <Header className="site-layout-background" style={{ padding: 0 }} />
                 <Content style={{ margin: '0 16px' }}>
-                    <Breadcrumb style={{ margin: '16px 0' }}>
+                    {/* <Breadcrumb style={{ margin: '16px 0' }}>
                         <Breadcrumb.Item>User</Breadcrumb.Item>
                         <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                    </Breadcrumb>
+                    </Breadcrumb> */}
                     <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-                        Bill is a cat.
+                        {props.content}
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

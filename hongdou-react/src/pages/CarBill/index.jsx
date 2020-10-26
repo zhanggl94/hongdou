@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import CarList from './Car/CarList';
 import CarBillView from './CarBillView';
-import api from '../../api';
-import { openNotification } from '../../utils/util';
-import constants from '../../utils/constants';
 
-const CarBill = () => {
+const CarBill = props => {
+    const [content, setContent] = useState(<CarList />);
 
+    const handleMenuItemClick = component => {
+        console.log('component',component)
+        switch (component) {
+            default:
+                setContent(<CarList />);
+                break;
+        }
+    }
+
+    console.log('carbill', props)
     return (
-        <CarBillView />
+        <CarBillView handleMenuItemClick={handleMenuItemClick} content={content} />
     );
 }
 
-export default CarBill;
+export default withRouter(CarBill);

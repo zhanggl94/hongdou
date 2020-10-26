@@ -21,5 +21,8 @@
     "Notification_lbl_success": "Success",
     "Notification_lbl_info": "Info",
     "Notification_lbl_warning": "Warning",
-    "Notification_lbl_error": "Error"
+    "Notification_lbl_error": "Error",
+    "CarView_lbl_Car":"Car",
+    "CarView_lbl_BillType":"BillType",
+    "CarView_lbl_Bill":"CarBill"
 }

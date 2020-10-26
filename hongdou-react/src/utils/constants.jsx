@@ -16,6 +16,7 @@ const constants = {
             bottmoLeft: 'bottmoLeft',
             bottomRight: 'bottomRight'
         }
-    }
+    },
+    component_CarList:'CarList', // 汽车列表
 }
 export default constants;

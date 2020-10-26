@@ -4,6 +4,7 @@ import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
 import constants from '../../../utils/constants';
 import './style.less';
+import logURL from '../../../assest/images/logo.svg';
 
 const { Option } = Select;
 
@@ -32,7 +33,7 @@ const HeaderView = (props) => {
     return (
         <div className='header'>
             <div className='header-content'>
-
+                <img className='logo' src={logURL} alt='hongdou' />
             </div>
             <div className='header-content'>
                 {userOperation}
