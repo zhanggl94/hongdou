@@ -17,6 +17,7 @@ const constants = {
             bottomRight: 'bottomRight'
         }
     },
-    component_CarList:'CarList', // 汽车列表
+    component_car:'Car', // 汽车列表
+    component_bill:'Bill', // 账单列表
 }
 export default constants;

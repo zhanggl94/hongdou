@@ -10,7 +10,7 @@ const tailLayout = {
     wrapperCol: { offset: 8, span: 16 },
 };
 
-const SigninView = (props) => {
+const SigninUI = (props) => {
 
     const onFinish = values => {
         props.onSubmit(values);
@@ -28,22 +28,22 @@ const SigninView = (props) => {
             onFinishFailed={onFinishFailed}
         >
             <Form.Item
-                label={intl.get('SigninView_lbl_username')}
+                label={intl.get('SigninUI_lbl_username')}
                 name="username"
                 rules={[{
                     required: true,
-                    message: intl.get('SigninView_msg_notNull', { param: intl.get('SigninView_lbl_username') })
+                    message: intl.get('SigninUI_msg_notNull', { param: intl.get('SigninUI_lbl_username') })
                 }]}
             >
                 <Input />
             </Form.Item>
 
             <Form.Item
-                label={intl.get('SigninView_lbl_password')}
+                label={intl.get('SigninUI_lbl_password')}
                 name="password"
                 rules={[{
                     required: true,
-                    message: intl.get('SigninView_msg_notNull', { param: intl.get('SigninView_lbl_password') })
+                    message: intl.get('SigninUI_msg_notNull', { param: intl.get('SigninUI_lbl_password') })
                 }]}
             >
                 <Input.Password />
@@ -51,11 +51,11 @@ const SigninView = (props) => {
 
             <Form.Item {...tailLayout}>
                 <Button type="primary" htmlType="submit">
-                    {intl.get('SigninView_lbl_signin')}
+                    {intl.get('SigninUI_lbl_signin')}
                 </Button>
             </Form.Item>
         </Form>
     );
 }
 
-export default SigninView;
+export default SigninUI;

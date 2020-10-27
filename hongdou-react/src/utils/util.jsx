@@ -17,6 +17,7 @@ export const openNotification = ({ type, message, placement }) => {
     if (!placementList.find(item => item === placements)) {
         placement = placements.bottomRight;
     }
+    
     //打开通知框
     notification[type]({
         message,

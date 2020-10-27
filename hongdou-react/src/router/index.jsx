@@ -2,12 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import App from '../pages/App'
-import Home from '../pages/Home';
+import Home from '../pages/Home/Home';
 import NotFound from '../pages/NotFound';
-import Signin from '../pages/Signin';
-import Signup from '../pages/Signup';
+import Signin from '../pages/Signin/Signin';
+import Signup from '../pages/Signup/Signup';
 import Auth from '../components/HOC/Auth';
-import CarBill from '../pages/CarBill';
+import CarBill from '../pages/CarBill/CarBill';
 import CommonProps from '../components/HOC/CommonProps';
 
 const Routers = () => {

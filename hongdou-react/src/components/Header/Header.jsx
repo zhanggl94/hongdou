@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import setUser from '../../store/actions/setUserAction';
 import { clearJWTToken } from '../../utils/util';
-import HeaderView from './HeaderView';
+import HeaderUI from './HeaderUI/HeaderUI';
 
 const Header = (props) => {
 
@@ -13,7 +13,7 @@ const Header = (props) => {
     }
 
     return (
-        <HeaderView changeLang={props.changeLang} auth={props.auth} clearUser={handleClearUser} />
+        <HeaderUI changeLang={props.changeLang} auth={props.auth} clearUser={handleClearUser} />
     );
 }
 

@@ -1,4 +1,4 @@
-import { Button, Col, Row, Select } from 'antd';
+import { Button, Select } from 'antd';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Link } from 'react-router-dom';
@@ -8,7 +8,7 @@ import logURL from '../../../assest/images/logo.svg';
 
 const { Option } = Select;
 
-const HeaderView = (props) => {
+const HeaderUI = (props) => {
     const handleChangeLang = e => {
         props.changeLang(e);
     }
@@ -18,14 +18,14 @@ const HeaderView = (props) => {
         userOperation = (
             <>
                 <span className='header-content'><Link to='/userinfo'>{props.auth.user.username}</Link></span>
-                <span className='header-content'><Button type='link' onClick={props.clearUser}>{intl.get('HeaderView_lbl_signout')}</Button></span>
+                <span className='header-content'><Button type='link' onClick={props.clearUser}>{intl.get('HeaderUI_lbl_signout')}</Button></span>
             </>
         );
     } else {
         userOperation = (
             <>
-                <span className='header-content'><Button size='small' href='/signin'>{intl.get('HeaderView_lbl_signin')}</Button></span>
-                <span className='header-content'><Button size='small' href='/signup'>{intl.get('HeaderView_lbl_signup')}</Button></span>
+                <span className='header-content'><Button size='small' href='/signin'>{intl.get('HeaderUI_lbl_signin')}</Button></span>
+                <span className='header-content'><Button size='small' href='/signup'>{intl.get('HeaderUI_lbl_signup')}</Button></span>
             </>
         );
     }
@@ -50,4 +50,4 @@ const HeaderView = (props) => {
     );
 }
 
-export default HeaderView;
+export default HeaderUI;

@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import intl from 'react-intl-universal';
 import jwtDecode from 'jwt-decode';
-import SigninView from './SigninView';
+import SigninUI from './SigninUI/SigninUI';
 import api from '../../api';
 import { openNotification, setJWTToken } from '../../utils/util';
 import constants from '../../utils/constants';
@@ -17,7 +17,7 @@ const Signin = (props) => {
                 if (data.isOk) {
                     openNotification({
                         type: constants.notifiction.type.success,
-                        message: intl.get('SigninView_msg_signin_success')
+                        message: intl.get('SigninUI_msg_signin_success')
                     });
                     setJWTToken(data.token);
                     props.setUser(jwtDecode(data.token));
@@ -25,21 +25,21 @@ const Signin = (props) => {
                 } else {
                     openNotification({
                         type: constants.notifiction.type.error,
-                        message: intl.get('SigninView_msg_signin_failed') + data.message
+                        message: intl.get('SigninUI_msg_signin_failed') + data.message
                     })
                 }
             }).catch(error => {
                 props.spinLoading(false);
                 openNotification({
                     type: constants.notifiction.type.error,
-                    message: intl.get('SigninView_msg_signin_failed') + data.message
+                    message: intl.get('SigninUI_msg_signin_failed') + data.message
                 })
                 console.error(data.error);
             });
     }
 
     return (
-        <SigninView onSubmit={handleSubmit} />
+        <SigninUI onSubmit={handleSubmit} />
     );
 }
 

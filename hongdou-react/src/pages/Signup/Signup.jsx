@@ -2,7 +2,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import jwtDecode from 'jwt-decode';
 import { withRouter } from 'react-router-dom';
-import SignupView from './SignupView';
+import SignupUI from './SignupUI/SignupUI';
 import api from '../../api';
 import constants from '../../utils/constants';
 import { openNotification, setJWTToken } from '../../utils/util';
@@ -21,13 +21,13 @@ const Signup = (props) => {
                         props.setUser(jwtDecode(data.jwtToken));
                         openNotification({
                             type: constants.notifiction.type.success,
-                            message: intl.get('SignupView_msg_sign_success') + data.message
+                            message: intl.get('SignupUI_msg_sign_success') + data.message
                         });
                         props.history.push('/');
                     } else {
                         openNotification({
                             type: constants.notifiction.type.error,
-                            message: intl.get('SignupView_msg_sign_failed') + data.message
+                            message: intl.get('SignupUI_msg_sign_failed') + data.message
                         });
                         console.error(data.error);
                     }
@@ -37,13 +37,13 @@ const Signup = (props) => {
                 console.error(error);
                 openNotification({
                     type: constants.notifiction.type.error,
-                    message: intl.get('SignupView_msg_sign_failed')
+                    message: intl.get('SignupUI_msg_sign_failed')
                 });
             });;
     }
 
     return (
-        <SignupView onFinish={handleSubmit} />
+        <SignupUI onFinish={handleSubmit} />
     );
 }
 

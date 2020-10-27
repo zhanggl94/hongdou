@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Spin } from 'antd';
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
 import intl from 'react-intl-universal';
 import { connect } from 'react-redux';
 
