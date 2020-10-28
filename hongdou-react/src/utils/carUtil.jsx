@@ -1,5 +1,7 @@
 import intl from 'react-intl-universal';
 
+export const brandList = [0, 1, 2, 3, 9999];
+
 export const getBrand = brand => {
     let carBrand = '';
     switch (brand) {
@@ -15,7 +17,10 @@ export const getBrand = brand => {
         case 3: //雪佛兰
             carBrand = intl.get('CarList_lbl_brand_chevrolet');
             break;
-        default:
+        case 9999: //未知
+            carBrand = intl.get('CarList_lbl_brand_unknow');
+            break;
+        default: //未知
             carBrand = intl.get('CarList_lbl_brand_unknow');
             break;
     }

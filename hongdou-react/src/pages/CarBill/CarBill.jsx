@@ -6,10 +6,10 @@ import Car from './CarBillUI/Car/Car';
 import CarBillUI from './CarBillUI/CarBillUI';
 
 const CarBill = props => {
-    const [content, setContent] = useState();
+    const [content, setContent] = useState(<Car />);
 
     const handleMenuItemClick = component => {
-        console.log('component',component)
+        console.log('component', component)
         switch (component) {
             case constants.component_car:
                 setContent(<Car />);

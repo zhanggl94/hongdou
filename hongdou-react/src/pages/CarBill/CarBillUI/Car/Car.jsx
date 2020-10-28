@@ -44,21 +44,21 @@ const Car = () => {
 
     const data = [
         {
-            id: '1',
+            key: '1',
             name: '丰田-雷凌',
             brand: 0,
             default: true,
             note: '我的车'
         },
         {
-            id: '2',
+            key: '2',
             name: '本田-雅阁',
             brand: 1,
             default: false,
             note: '我的车1'
         }
     ];
-    console.log('columns', columns)
+
     return (
         <CarList columns={columns} data={data} />
     );
