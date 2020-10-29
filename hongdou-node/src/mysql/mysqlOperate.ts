@@ -22,7 +22,7 @@ class MySqlOperate {
                     reject(error);
                 } else {
                     console.log('Connect mysql success.')
-                    resolve();
+                    resolve(true);
                 }
 
             })

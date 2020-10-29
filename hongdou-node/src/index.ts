@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(auth);
 app.use('/api', signupRouter);
 app.use('/api', signinRouter);
-app.use('/api', carBillRouter)
+app.use('/api/carbill', carBillRouter)
 
 app.listen(3001, () => {
     console.log('node server start at 3001.');

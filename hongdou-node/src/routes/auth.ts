@@ -6,7 +6,6 @@ const auth = async (req: Request, res: Response, next: Function) => {
         const token: string = req.headers.jwttoken as string;
         try {
             const result = await verifyToken(token);
-            console.log(result);
             next();
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
