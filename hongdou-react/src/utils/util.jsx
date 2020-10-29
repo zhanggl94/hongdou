@@ -6,7 +6,6 @@ import constants from './constants';
  * @param {*} param0 
  */
 export const openNotification = ({ type, message, placement }) => {
-    console.log('open', message)
     const types = constants.notifiction.type;
     const placements = constants.notifiction.placement;
     const typeList = [types.success, types.info, types.warning, types.error];

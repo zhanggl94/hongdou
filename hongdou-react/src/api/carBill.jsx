@@ -1,8 +1,11 @@
 import base from '../api/base';
-import { getData } from '../utils/http';
+import { getData, postData } from '../utils/http';
 
 export default {
-    searchRequest: () => {
-        return getData(base.searchCarBill, true);
+    searchCar: data => {
+        return postData(base.searchCarBill, data);
+    },
+    createCar: data => {
+        return postData(base.createCar, data);
     }
 }

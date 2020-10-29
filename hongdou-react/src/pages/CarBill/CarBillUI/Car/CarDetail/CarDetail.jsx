@@ -12,11 +12,11 @@ const CarDetail = props => {
     }
 
     const handleSelectChange = value => {
-        props.getCarInfo('carBrand', value);
+        props.getCarInfo('brand', value);
     }
 
     const handleCheckBoxChange = e => {
-        props.getCarInfo('default', e.target.checked);
+        props.getCarInfo('default', e.target.checked ? 1 : 0);
     }
 
     const { Option } = Select;
@@ -26,7 +26,7 @@ const CarDetail = props => {
                 <Col span={8} className='text-right'>{intl.get('CarDetail_lbl_name')}:</Col>
                 <Col span={2}></Col>
                 <Col span={10}>
-                    <Input name='carName' type='text' onChange={handleInputChange} />
+                    <Input name='name' type='text' onChange={handleInputChange} />
                 </Col>
                 <Col span={2}></Col>
             </Row>

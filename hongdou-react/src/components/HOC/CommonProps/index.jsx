@@ -11,9 +11,10 @@ export default Commponent => {
         );
     }
 
-    const mapStateToProps = ({ auth }) => {
+    const mapStateToProps = ({ auth,loadingStatus }) => {
         return {
-            auth
+            auth,
+            loadingStatus
         }
     }
 

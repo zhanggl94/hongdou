@@ -12,12 +12,12 @@ const getHeaders = (isToken) => {
     return headers;
 }
 
-export const getData = (url, isToken = false) => fetch(url, {
+export const getData = (url, isToken = true) => fetch(url, {
     method: 'get',
     headers: getHeaders(isToken)
 }).then(res => res.json());
 
-export const postData = (url, data, isToken = false) => fetch(url, {
+export const postData = (url, data, isToken = true) => fetch(url, {
     method: 'post',
     headers: getHeaders(isToken),
     body: qs.stringify(data)

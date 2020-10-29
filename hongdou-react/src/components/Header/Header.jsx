@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import setUser from '../../store/actions/setUserAction';
 import { clearJWTToken } from '../../utils/util';
@@ -10,6 +11,7 @@ const Header = (props) => {
     const handleClearUser = () => {
         clearJWTToken();
         props.setUser({});
+        props.history.push('/signin');
     }
 
     return (
@@ -27,4 +29,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
