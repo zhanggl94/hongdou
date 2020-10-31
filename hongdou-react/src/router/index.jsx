@@ -13,9 +13,9 @@ import CommonProps from '../components/HOC/CommonProps';
 const Routers = () => {
     return (
         <Router>
-            <App path='/'>
+            <App>
                 <Switch>
-                    <Route exact path='/' component={Home}></Route>
+                    <Route exact path='/' component={Auth(Home)}></Route>
                     <Route path='/signup' component={CommonProps(Signup)}></Route>
                     <Route path='/signin' component={CommonProps(Signin)}></Route>
                     <Route exact path='/carbill' component={Auth(CommonProps(CarBill))}></Route>

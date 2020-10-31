@@ -6,14 +6,14 @@ import { connect } from 'react-redux';
 
 const currLanguage = localStorage.getItem('lang-type') || 'zh';
 
-const locales = {
-  'zh': require('../locales/zh.json'),
-  'en': require('../locales/en.json')
-}
 function App(props) {
 
   const [lanInitDone, setlanInitDone] = useState(false);
 
+  const locales = {
+    'zh': require('../locales/zh.json'),
+    'en': require('../locales/en.json')
+  }
   //多语言初始化
   useEffect(() => {
     intl.init({

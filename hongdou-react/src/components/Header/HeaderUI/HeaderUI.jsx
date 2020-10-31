@@ -1,7 +1,7 @@
 import { Button, Select } from 'antd';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import constants from '../../../utils/constants';
 import './style.less';
 import logURL from '../../../assest/images/logo.svg';
@@ -11,6 +11,10 @@ const { Option } = Select;
 const HeaderUI = (props) => {
     const handleChangeLang = e => {
         props.changeLang(e);
+    }
+
+    const goToHome = e => {
+        props.history.push('/');
     }
 
     let userOperation;
@@ -33,7 +37,7 @@ const HeaderUI = (props) => {
     return (
         <div className='header'>
             <div className='header-content'>
-                <img className='logo' src={logURL} alt='hongdou' />
+                <a onClick={goToHome}><img className='logo' src={logURL} alt='hongdou' /></a>
             </div>
             <div className='header-content'>
                 {userOperation}
@@ -50,4 +54,4 @@ const HeaderUI = (props) => {
     );
 }
 
-export default HeaderUI;
+export default withRouter(HeaderUI);
