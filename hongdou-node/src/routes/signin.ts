@@ -4,6 +4,7 @@ import { cryPassword } from '../utils/cryptoUtil';
 import { createToken } from '../utils/jwtUtil';
 import { formatDateHour24 } from '../utils/util';
 import constants from '../utils/constants';
+import qs from 'querystring'
 
 const router = express.Router();
 
@@ -36,8 +37,6 @@ const isUserExist = async (req: Request, mysql: MySqlOperate) => {
         const data: any = await mysql.querySql(sql, paramList);
         if (data.length) {
             const { id, password, createtime } = data[0];
-            console.log(createtime);
-            console.log(formatDateHour24(createtime, constants.time_zone_zh_cn));
             if (password === cryPassword(req.body.password, formatDateHour24(createtime, constants.time_zone_zh_cn))) {
                 result.isOk = true;
                 result.token = createToken({ username: req.body.username });

@@ -10,7 +10,6 @@ const router = express.Router();
  */
 router.post('/createcar', async (req: Request, res: Response) => {
     const result = { isOk: true, error: {}, message: '' };
-    console.log(req.body);
     const sql = `INSERT INTO car (name,brand,isDefault,note) VALUES (?,?,?,?)`;
     const paramList = [req.body.name, req.body.brand, req.body.default, req.body.note];
     const mysql = new MySqlOperate();
@@ -38,15 +37,27 @@ router.post('/createcar', async (req: Request, res: Response) => {
  */
 router.post('/search', async (req: Request, res: Response) => {
     const result = new ResponseResult();
-    const sql = `SELECT * FROM car WHERE 1=1 `;
-    const paramList = new Array<string>();
+    const keyList: Array<string> = [],
+        opertionList: Array<string> = [],
+        valueList: Array<string> = [];
     if (!isEmpty(req.body)) {
-
+        req.body.map((item: any) => {
+            keyList.push(item.key);
+            opertionList.push(item.operation);
+            valueList.push(item.value);
+        });
     }
+    let sql = `SELECT * FROM car WHERE 1=1 `;
+    if (keyList.length) {
+        for (let i: number = 0; i < keyList.length; i++) {
+            sql += ` AND ${keyList[i]} ${opertionList[i]} ?`;
+        }
+    }
+    
     try {
         const mysql = new MySqlOperate();
         await mysql.connectmysql();
-        const data: any = await mysql.querySql(sql, paramList);
+        const data: any = await mysql.querySql(sql, valueList);
         if (data.length) {
             result.data = data;
         }
