@@ -3,7 +3,7 @@ import qs from 'querystring';
 const getHeaders = (isToken) => {
     const headers = {
         'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json; charset=utf-8'
     };
 
     if (isToken && localStorage.getItem('jwtToken')) {
@@ -20,5 +20,5 @@ export const getData = (url, isToken = true) => fetch(url, {
 export const postData = (url, data, isToken = true) => fetch(url, {
     method: 'post',
     headers: getHeaders(isToken),
-    body: qs.stringify(data)
+    body: JSON.stringify(data)
 }).then(res => res.json());

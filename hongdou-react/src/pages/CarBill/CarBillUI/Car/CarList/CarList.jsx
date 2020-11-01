@@ -8,6 +8,7 @@ import { openNotification } from '../../../../../utils/util';
 import constants from '../../../../../utils/constants';
 import { getBrand, getDefault } from '../../../../../utils/carUtil';
 import { Space } from 'antd';
+import QueryParam from '../../../../../modle/QueryParam';
 
 const CarList = (props) => {
 
@@ -15,7 +16,7 @@ const CarList = (props) => {
 
     //页面初期化时，加载汽车列表
     useEffect(() => {
-        searchAllCar();
+        searchAllCar({});
     }, []);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -31,7 +32,6 @@ const CarList = (props) => {
     const handleOK = () => {
         createCarRequest(carInfo);
         hideModal();
-        console.log(carInfo)
     }
 
     const handleCancel = () => {
@@ -57,10 +57,10 @@ const CarList = (props) => {
     /**
      * 查找全部汽车信息
      */
-    const searchAllCar = async () => {
+    const searchAllCar = async params => {
         props.spinLoading(true);
         try {
-            const data = await searchCarQuest();
+            const data = await searchCarQuest(params);
             if (data.isOk) {
                 setCarList(data.data.map(item => { item.key = item.id; return item }));
             } else {
@@ -83,11 +83,11 @@ const CarList = (props) => {
 
     const editCar = async record => {
         showModal();
-        // const queryParams = new QueryParams();
-        // queryParams.key = 'id';
-        // queryParams.value = record.id;
-        // const data = await searchCarQuest({ queryParams });
-
+        const queryParams = new QueryParam({ key: 'id', value: record.id });
+        const paramList = [];
+        paramList.push(queryParams);
+        const data = await searchCarQuest(paramList);
+        console.log('data',data)
     }
 
     const editCarQuest = id => {
@@ -108,7 +108,7 @@ const CarList = (props) => {
                         type: constants.notifiction.type.success,
                         message: intl.get('CarList_msg_create_success')
                     });
-                    searchAllCar();
+                    searchAllCar({});
                 } else {
                     openNotification({
                         type: constants.notifiction.type.warning,
@@ -130,7 +130,7 @@ const CarList = (props) => {
      * 查询汽车信息
      * @param {*} data 
      */
-    const searchCarQuest = (data = null) => {
+    const searchCarQuest = data => {
         return new Promise((resolve, reject) => {
             api.carBill.searchCar(data)
                 .then(data => {
