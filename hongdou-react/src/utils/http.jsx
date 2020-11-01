@@ -1,4 +1,3 @@
-import qs from 'querystring';
 
 const getHeaders = (isToken) => {
     const headers = {
