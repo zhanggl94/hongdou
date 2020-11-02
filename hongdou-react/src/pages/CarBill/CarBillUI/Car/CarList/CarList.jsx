@@ -16,7 +16,7 @@ const CarList = (props) => {
 
     //页面初期化时，加载汽车列表
     useEffect(() => {
-        searchAllCar({});
+        searchAllCar([new QueryParam({ key: 'userId', value: props.currentUser.userid })]);
     }, []);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -38,7 +38,7 @@ const CarList = (props) => {
         hideModal();
     }
 
-    const [carInfo, setCarInfo] = useState({});
+    const [carInfo, setCarInfo] = useState({ name: '', brand: 0, isDefault: 0, note: '', userId: props.currentUser.userid });
 
     /**
      * 获取子组件cardetail填写的内容
@@ -87,7 +87,7 @@ const CarList = (props) => {
         const paramList = [];
         paramList.push(queryParams);
         const data = await searchCarQuest(paramList);
-        console.log('data',data)
+        console.log('data', data)
     }
 
     const editCarQuest = id => {
@@ -100,6 +100,7 @@ const CarList = (props) => {
      */
     const createCarRequest = data => {
         props.spinLoading(true);
+        data.userId = props.currentUser.userid;
         api.carBill.createCar(data)
             .then(data => {
                 props.spinLoading(false);
@@ -108,7 +109,7 @@ const CarList = (props) => {
                         type: constants.notifiction.type.success,
                         message: intl.get('CarList_msg_create_success')
                     });
-                    searchAllCar({});
+                    searchAllCar([new QueryParam({ key: 'userId', value: props.currentUser.userid })]);
                 } else {
                     openNotification({
                         type: constants.notifiction.type.warning,

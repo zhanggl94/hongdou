@@ -20,6 +20,7 @@ const Signin = (props) => {
                         message: intl.get('SigninUI_msg_signin_success')
                     });
                     setJWTToken(data.token);
+                    console.log('data.token',jwtDecode(data.token))
                     props.setUser(jwtDecode(data.token));
                     props.history.push('/');
                 } else {

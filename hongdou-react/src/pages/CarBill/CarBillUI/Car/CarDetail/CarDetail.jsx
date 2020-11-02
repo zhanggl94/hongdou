@@ -16,7 +16,7 @@ const CarDetail = props => {
     }
 
     const handleCheckBoxChange = e => {
-        props.getCarInfo('default', e.target.checked ? 1 : 0);
+        props.getCarInfo('idDefault', e.target.checked ? 1 : 0);
     }
 
     const { Option } = Select;

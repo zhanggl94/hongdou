@@ -3,7 +3,7 @@ import { SETUSER } from "../actTypes"
 
 const initState = {
     isAuth: false,
-    user: {}
+    currentUser: {}
 }
 
 const auth = (state = initState, action) => {
@@ -11,7 +11,7 @@ const auth = (state = initState, action) => {
         case SETUSER:
             return {
                 isAuth: !isEmpty(action.user),
-                user: action.user
+                currentUser: action.user
             }
         default:
             return state;

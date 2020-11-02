@@ -21,7 +21,7 @@ const HeaderUI = (props) => {
     if (props.auth.isAuth) {
         userOperation = (
             <>
-                <span className='header-content'><Link to='/userinfo'>{props.auth.user.username}</Link></span>
+                <span className='header-content'><Link to='/userinfo'>{props.auth.currentUser.username}</Link></span>
                 <span className='header-content'><Button type='link' onClick={props.clearUser}>{intl.get('HeaderUI_lbl_signout')}</Button></span>
             </>
         );
