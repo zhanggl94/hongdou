@@ -4,10 +4,11 @@ import { formatDateHour24 } from '../utils/util';
 import { createToken } from '../utils/jwtUtil';
 import constants from '../utils/constants';
 import MySqlOperate from '../mysql/mysqlOperate';
+import ResponResult from '../module/ResponResult';
 const router = express.Router();
 
 router.post('/signup', async (req: Request, res: Response) => {
-    let result = { isOk: true, error: {}, message: '', jwtToken: '' };
+    let result: ResponResult = new ResponResult();
     try {
         const mysql = new MySqlOperate();
         await mysql.connectmysql();
@@ -21,7 +22,7 @@ router.post('/signup', async (req: Request, res: Response) => {
                 let httpCode = 400;
                 if (result.isOk) {
                     httpCode = 200;
-                    result.jwtToken = createToken({ username: req.body.username });
+                    result.jwtToken = createToken({ username: req.body.username, userId: result.data.userId });
                 }
                 res.status(httpCode).send(result);
             } else {
@@ -40,12 +41,7 @@ router.post('/signup', async (req: Request, res: Response) => {
  * @param mysql 
  */
 const isUserExist = async (req: Request, mysql: MySqlOperate) => {
-    const result = {
-        isOk: true,
-        error: {},
-        message: '',
-        jwtToken: ''
-    }
+    const result = new ResponResult();
     const sql = `select id from user where username = ?`;
     const paramList: Array<string> = [req.body.username];
     try {
@@ -71,12 +67,7 @@ const isUserExist = async (req: Request, mysql: MySqlOperate) => {
  * @param mysql 数据库操作对象
  */
 const createUser = async (req: Request, mysql: MySqlOperate) => {
-    const result = {
-        isOk: true,
-        error: {},
-        message: '',
-        jwtToken: ''
-    }
+    const result = new ResponResult();
     const currentDateTime = formatDateHour24(new Date(), constants.time_zone_zh_cn);
     console.log('curr', currentDateTime);
     const sql = `INSERT INTO user VALUES (null,?,?,?,?)`;
@@ -84,9 +75,12 @@ const createUser = async (req: Request, mysql: MySqlOperate) => {
     const paramList = [req.body.username, cryPwd, currentDateTime, currentDateTime];
     try {
         const data: any = await mysql.querySql(sql, paramList)
+        console.log('data', data)
         if (!data.affectedRows) {
             result.isOk = false;
             result.message = 'Create user in db failed.';
+        } else {
+            result.data = { id: data.insertId };
         }
     } catch (error) {
         result.isOk = false;

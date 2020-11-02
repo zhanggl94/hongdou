@@ -10,8 +10,8 @@ const router = express.Router();
  */
 router.post('/createcar', async (req: Request, res: Response) => {
     const result = { isOk: true, error: {}, message: '' };
-    const sql = `INSERT INTO car (name,brand,isDefault,note) VALUES (?,?,?,?)`;
-    const paramList = [req.body.name, req.body.brand, req.body.default, req.body.note];
+    const sql = `INSERT INTO car (name,brand,isDefault,note, userId) VALUES (?,?,?,?,?)`;
+    const paramList = [req.body.name, req.body.brand, req.body.default, req.body.note, req.body.userId];
     const mysql = new MySqlOperate();
     try {
         await mysql.connectmysql();
@@ -41,6 +41,7 @@ router.post('/search', async (req: Request, res: Response) => {
         opertionList: Array<string> = [],
         valueList: Array<string> = [];
     if (!isEmpty(req.body)) {
+        console.log('body',req.body)
         req.body.map((item: any) => {
             keyList.push(item.key);
             opertionList.push(item.operation);
@@ -53,7 +54,7 @@ router.post('/search', async (req: Request, res: Response) => {
             sql += ` AND ${keyList[i]} ${opertionList[i]} ?`;
         }
     }
-    
+
     try {
         const mysql = new MySqlOperate();
         await mysql.connectmysql();

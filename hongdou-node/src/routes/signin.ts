@@ -39,7 +39,7 @@ const isUserExist = async (req: Request, mysql: MySqlOperate) => {
             const { id, password, createtime } = data[0];
             if (password === cryPassword(req.body.password, formatDateHour24(createtime, constants.time_zone_zh_cn))) {
                 result.isOk = true;
-                result.token = createToken({ username: req.body.username });
+                result.token = createToken({ username: req.body.username, userid: id });
                 const updateSql = `UPDATE user SET lastlogintime = ? where id = ?`;
                 const updateParamList = [formatDateHour24(new Date(), constants.time_zone_zh_cn), id];
                 mysql.querySql(updateSql, updateParamList);

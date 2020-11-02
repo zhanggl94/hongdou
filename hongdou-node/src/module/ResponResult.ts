@@ -3,4 +3,5 @@ export default class ResponResult {
     public error: object = {};
     public message: string = '';
     public data: any;
+    public jwtToken: string = '';
 }
