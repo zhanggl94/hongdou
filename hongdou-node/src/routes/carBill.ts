@@ -9,7 +9,7 @@ const router = express.Router();
  * 创建汽车信息
  */
 router.post('/createcar', async (req: Request, res: Response) => {
-    const result = { isOk: true, error: {}, message: '' };
+    const result = new ResponseResult();
     const sql = `INSERT INTO car (name,brand,isDefault,note, userId) VALUES (?,?,?,?,?)`;
     const paramList = [req.body.name, req.body.brand, req.body.default, req.body.note, req.body.userId];
     const mysql = new MySqlOperate();
@@ -41,7 +41,6 @@ router.post('/search', async (req: Request, res: Response) => {
         opertionList: Array<string> = [],
         valueList: Array<string> = [];
     if (!isEmpty(req.body)) {
-        console.log('body',req.body)
         req.body.map((item: any) => {
             keyList.push(item.key);
             opertionList.push(item.operation);
@@ -59,6 +58,7 @@ router.post('/search', async (req: Request, res: Response) => {
         const mysql = new MySqlOperate();
         await mysql.connectmysql();
         const data: any = await mysql.querySql(sql, valueList);
+        console.log('data',data)
         if (data.length) {
             result.data = data;
         }
@@ -69,6 +69,30 @@ router.post('/search', async (req: Request, res: Response) => {
         result.error = error;
         res.status(400).send(result);
     }
+});
 
+/**
+ * 删除汽车信息
+ */
+router.post('/deletecar', async (req: Request, res: Response) => {
+    const sql = `DELETE FROM car WHERE id=?`;
+    const paramList = [req.body.id];
+    const mysql = new MySqlOperate();
+    const result = new ResponseResult();
+    try {
+        await mysql.connectmysql();
+        const data: any = await mysql.querySql(sql, paramList);
+        let resCode = 200;
+        if (!data.affectedRows) {
+            result.isOk = false;
+            result.message = 'There is no record be deleted. Delete failed.';
+            resCode = 400;
+        }
+        res.status(resCode).send(result);
+    } catch (error) {
+        result.isOk = false;
+        result.error = error;
+        result.message = 'There has some system erro.';
+    }
 })
 export default router;
