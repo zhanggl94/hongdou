@@ -12,11 +12,19 @@ import QueryParam from '../../../../../modle/QueryParam';
 
 const CarList = (props) => {
 
-    const [carList, setCarList] = useState(null)
+    const userId = new QueryParam({ key: 'userId', value: props.currentUser.userid });
+    const [carList, setCarList] = useState(null);
+    const [detailCarInfo, setDetailCarInfo] = useState({
+        name: '',
+        brand: 0,
+        isDefault: 0,
+        note: '',
+        userId: props.currentUser.userid
+    })
 
     //页面初期化时，加载汽车列表
     useEffect(() => {
-        searchAllCar([new QueryParam({ key: 'userId', value: props.currentUser.userid })]);
+        searchAllCar([userId]);
     }, []);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -30,7 +38,7 @@ const CarList = (props) => {
     }
 
     const handleOK = () => {
-        createCarRequest(carInfo);
+        createCarRequest(detailCarInfo);
         hideModal();
     }
 
@@ -38,20 +46,32 @@ const CarList = (props) => {
         hideModal();
     }
 
-    const [carInfo, setCarInfo] = useState({ name: '', brand: 0, isDefault: 0, note: '', userId: props.currentUser.userid });
 
     /**
      * 获取子组件cardetail填写的内容
      * @param {*} key 
      * @param {*} value 
      */
-    const getCarInfo = (key, value) => {
-        if (carInfo && carInfo.hasOwnProperty(key)) {
-            carInfo[key] = value;
-        } else {
-            carInfo[key] = value;
-        }
-        setCarInfo(carInfo);
+    const getCarInfo = detailInfo => {
+        setDetailCarInfo(detailInfo);
+    }
+
+    /**
+     * 清空carInfo
+     */
+    const clearCarInfo = () => {
+        setDetailCarInfo({
+            name: '',
+            brand: 0,
+            isDefault: 0,
+            note: '',
+            userId: props.currentUser.userid
+        });
+    }
+
+    const createCarInfo = () => {
+        showModal();
+        clearCarInfo();
     }
 
     /**
@@ -62,7 +82,11 @@ const CarList = (props) => {
         try {
             const data = await searchCarQuest(params);
             if (data.isOk) {
-                setCarList(data.data.map(item => { item.key = item.id; return item }));
+                if (data.data?.length) {
+                    setCarList(data.data.map(item => { item.key = item.id; return item }));
+                }else{
+                    setCarList(null);
+                }
             } else {
                 openNotification({
                     type: constants.notifiction.type.warning,
@@ -82,12 +106,33 @@ const CarList = (props) => {
     }
 
     const editCar = async record => {
-        showModal();
         const queryParams = new QueryParam({ key: 'id', value: record.id });
         const paramList = [];
         paramList.push(queryParams);
-        const data = await searchCarQuest(paramList);
-        console.log('data', data)
+        try {
+            const data = await searchCarQuest(paramList);
+            if (data.isOk) {
+                showModal();
+                setDetailCarInfo({
+                    name: data.data[0].name,
+                    brand: data.data[0].brand,
+                    isDefault: data.data[0].isDefault,
+                    note: data.data[0].note,
+                    userId: data.data[0].userId
+                });
+            } else {
+                openNotification({
+                    type: constants.notifiction.warning,
+                    messaage: data.message
+                })
+            }
+        } catch (error) {
+            openNotification({
+                type: constants.notifiction.error,
+                messaage: error.message
+            })
+        }
+
     }
 
     const editCarQuest = id => {
@@ -109,7 +154,7 @@ const CarList = (props) => {
                         type: constants.notifiction.type.success,
                         message: intl.get('CarList_msg_create_success')
                     });
-                    searchAllCar([new QueryParam({ key: 'userId', value: props.currentUser.userid })]);
+                    searchAllCar([userId]);
                 } else {
                     openNotification({
                         type: constants.notifiction.type.warning,
@@ -125,6 +170,35 @@ const CarList = (props) => {
                 });
                 console.error(error);
             })
+    }
+
+
+    const deleteCar = id => {
+        props.spinLoading(true);
+        api.carBill.deleteCar({ id })
+            .then(data => {
+                props.spinLoading(false);
+                if (data.isOk) {
+                    openNotification({
+                        type: constants.notifiction.type.success,
+                        message: intl.get('CarList_msg_delete_success')
+                    });
+                    searchAllCar([userId]);
+                } else {
+                    openNotification({
+                        type: constants.notifiction.type.warning,
+                        message: intl.get('CarList_msg_delete_failed') + data.message
+                    });
+                }
+            })
+            .catch(error => {
+                props.spinLoading(false);
+                openNotification({
+                    type: constants.notifiction.type.error,
+                    message: intl.get('CarList_msg_delete_failed') + error.message
+                });
+                console.error(error);
+            });
     }
 
     /**
@@ -172,7 +246,7 @@ const CarList = (props) => {
             render: (text, record, index) => (
                 <Space size='middle'>
                     <a onClick={editCar.bind(this, record)}>{intl.get('CarList_lbl_edit')}</a>
-                    <a href="">{intl.get('CarList_lbl_delete')}</a>
+                    <a onClick={deleteCar.bind(this, record.id)}>{intl.get('CarList_lbl_delete')}</a>
                 </Space>
             )
         }
@@ -181,7 +255,7 @@ const CarList = (props) => {
     return (
         <>
             <div>
-                <Button onClick={showModal}>{intl.get('CarList_lbl_btn_create')}</Button>
+                <Button onClick={createCarInfo}>{intl.get('CarList_lbl_btn_create')}</Button>
             </div>
 
             <Table columns={columns} dataSource={carList} />
@@ -193,7 +267,7 @@ const CarList = (props) => {
                     <Button type='primary' key='ok' onClick={handleOK}>{intl.get('CarList_lbl_btn_ok')}</Button>,
                     <Button key='return' onClick={handleCancel}>{intl.get('CarList_lbl_btn_cancel')}</Button>
                 ]}>
-                <CarDetail getCarInfo={getCarInfo} />
+                <CarDetail getCarInfo={getCarInfo} detailCarInfo={detailCarInfo} />
             </Modal>
         </>
     );

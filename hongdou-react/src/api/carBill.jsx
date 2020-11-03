@@ -7,5 +7,8 @@ export default {
     },
     createCar: data => {
         return postData(base.createCar, data);
+    },
+    deleteCar: data => {
+        return postData(base.deleteCar, data);
     }
 }
