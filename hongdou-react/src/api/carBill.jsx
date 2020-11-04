@@ -8,6 +8,9 @@ export default {
     createCar: data => {
         return postData(base.createCar, data);
     },
+    editCar: data => {
+        return postData(base.editCar, data);
+    },
     deleteCar: data => {
         return postData(base.deleteCar, data);
     }
