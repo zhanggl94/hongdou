@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/createcar', async (req: Request, res: Response) => {
     const result = new ResponseResult();
     const sql = `INSERT INTO car (name,brand,isDefault,note, userId) VALUES (?,?,?,?,?)`;
-    const paramList = [req.body.name, req.body.brand, req.body.default, req.body.note, req.body.userId];
+    const paramList = [req.body.name, req.body.brand, req.body.isDefault, req.body.note, req.body.userId];
     const mysql = new MySqlOperate();
     try {
         await mysql.connectmysql();
@@ -58,7 +58,7 @@ router.post('/search', async (req: Request, res: Response) => {
         const mysql = new MySqlOperate();
         await mysql.connectmysql();
         const data: any = await mysql.querySql(sql, valueList);
-        console.log('data',data)
+        console.log('data', data)
         if (data.length) {
             result.data = data;
         }
@@ -68,6 +68,31 @@ router.post('/search', async (req: Request, res: Response) => {
         result.message = 'There has some system error.';
         result.error = error;
         res.status(400).send(result);
+    }
+});
+
+/**
+ * 更新汽车信息
+ */
+router.post('/editcar', async (req: Request, res: Response) => {
+    const result = new ResponseResult();
+    const sql = `UPDATE car WHERE id = ?`;
+    const paramList = [req.body.id];
+    const mysql = new MySqlOperate();
+    try {
+        await mysql.connectmysql();
+        const data: any = mysql.querySql(sql, paramList);
+        let responseCode = 200;
+        if (!data.affectedRows) {
+            result.isOk = false;
+            result.message = 'Update car failed.';
+            responseCode = 400;
+        }
+        res.status(responseCode).send(result);
+    } catch (error) {
+        result.isOk=false;
+        result.error=error;
+        result.message='There has some system error.';
     }
 });
 
