@@ -15,6 +15,9 @@ router.post('/createcar', async (req: Request, res: Response) => {
     const mysql = new MySqlOperate();
     try {
         await mysql.connectmysql();
+        if (req.body.isDefault === 1) {
+            await setIsDefault(mysql, req.body.userId);
+        }
         const data: any = await mysql.querySql(sql, paramList);
         let resCode = 200;
         if (!data.affectedRows) {
@@ -53,12 +56,10 @@ router.post('/search', async (req: Request, res: Response) => {
             sql += ` AND ${keyList[i]} ${opertionList[i]} ?`;
         }
     }
-
+    const mysql = new MySqlOperate();
     try {
-        const mysql = new MySqlOperate();
         await mysql.connectmysql();
         const data: any = await mysql.querySql(sql, valueList);
-        console.log('data', data)
         if (data.length) {
             result.data = data;
         }
@@ -69,6 +70,7 @@ router.post('/search', async (req: Request, res: Response) => {
         result.error = error;
         res.status(400).send(result);
     }
+    mysql.endmysql();
 });
 
 /**
@@ -76,13 +78,18 @@ router.post('/search', async (req: Request, res: Response) => {
  */
 router.post('/editcar', async (req: Request, res: Response) => {
     const result = new ResponseResult();
-    const sql = `UPDATE car WHERE id = ?`;
-    const paramList = [req.body.id];
+    const sql = `UPDATE car SET name = ?, brand = ?, isDefault = ?, note = ? WHERE id = ? AND userId = ?`;
+    const body = req.body;
+    const paramList = [body.name, body.brand, body.isDefault, body.note, body.id, body.userId];
     const mysql = new MySqlOperate();
     try {
         await mysql.connectmysql();
-        const data: any = mysql.querySql(sql, paramList);
+        if (body.isDefault === 1) { // 当设置为默认值时，清除其他汽车的默认选项(默认汽车只有一辆)
+            await setIsDefault(mysql, body.userId);
+        }
+        const data: any = await mysql.querySql(sql, paramList);
         let responseCode = 200;
+        console.log('data', data)
         if (!data.affectedRows) {
             result.isOk = false;
             result.message = 'Update car failed.';
@@ -90,11 +97,23 @@ router.post('/editcar', async (req: Request, res: Response) => {
         }
         res.status(responseCode).send(result);
     } catch (error) {
-        result.isOk=false;
-        result.error=error;
-        result.message='There has some system error.';
+        result.isOk = false;
+        result.error = error;
+        result.message = 'There has some system error.';
     }
+    mysql.endmysql();
 });
+
+/**
+ * 汽车只能有一辆是默认值
+ * @param mysql 
+ * @param userId 
+ */
+const setIsDefault = async (mysql: MySqlOperate, userId: string) => {
+    const sql = `UPDATE car SET isDefault = 0 WHERE userId = ? AND isDefault = 1`;
+    const paramList = [userId];
+    await mysql.querySql(sql, paramList);
+}
 
 /**
  * 删除汽车信息
@@ -119,5 +138,6 @@ router.post('/deletecar', async (req: Request, res: Response) => {
         result.error = error;
         result.message = 'There has some system erro.';
     }
+    mysql.endmysql();
 })
 export default router;

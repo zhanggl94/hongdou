@@ -6,8 +6,7 @@ import signinRouter from './routes/signin';
 import carBillRouter from './routes/carBill';
 
 const app = express();
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json({ strict: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(auth);
