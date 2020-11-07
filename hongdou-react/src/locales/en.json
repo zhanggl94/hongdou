@@ -55,5 +55,13 @@
     "CarDetail_lbl_name":"Car Name",
     "CarDetail_lbl_brand":"Car Brand",
     "CarDetail_lbl_default":"Default",
-    "CarDetail_lbl_note":"Node"
+    "CarDetail_lbl_note":"Node",
+    "BillList_lbl_carName":"Car Name",
+    "BillList_lbl_date":"Date",
+    "BillList_lbl_bill_type":"Bill Type",
+    "BillList_lbl_actual":"Actual",
+    "BillList_lbl_discount":"Discount",
+    "BillList_lbl_total":"Total",
+    "BillList_lbl_pay_type":"Pay Type",
+    "BillList_lbl_unit_price":"Unit Price"
 }

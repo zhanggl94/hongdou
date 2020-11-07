@@ -3,7 +3,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import React, { useState, useEffect, useContext } from 'react';
 import intl from 'react-intl-universal';
 import CommonContext from '../../../../../components/CommonContext';
-import * as carUtil from '../../../../../utils/carUtil';
+import * as carUtil from '../carUtil';
 import './style.less';
 
 const CarDetail = props => {

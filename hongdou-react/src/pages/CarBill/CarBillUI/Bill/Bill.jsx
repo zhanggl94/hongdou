@@ -1,9 +1,13 @@
 import React from 'react';
-import BillUI from './BillUI/BillUI';
+import BillSearch from './BillSearch/BillSearch';
+import BillList from './BillList/BillList';
 
 const Bill = () => {
     return (
-        <BillUI />
+        <>
+            <BillSearch />
+            <BillList />
+        </>
     );
 }
 

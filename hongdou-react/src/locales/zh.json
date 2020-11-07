@@ -55,5 +55,13 @@
     "CarDetail_lbl_name":"汽车名",
     "CarDetail_lbl_brand":"品牌",
     "CarDetail_lbl_default":"默认",
-    "CarDetail_lbl_note":"备注"
+    "CarDetail_lbl_note":"备注",
+    "BillList_lbl_carName":"汽车名",
+    "BillList_lbl_date":"日期",
+    "BillList_lbl_bill_type":"类别",
+    "BillList_lbl_actual":"实际花费",
+    "BillList_lbl_discount":"优惠",
+    "BillList_lbl_total":"总金额",
+    "BillList_lbl_pay_type":"付款方式",
+    "BillList_lbl_unit_price":"单价"
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Table, Modal, Button } from 'antd';
 import CarDetail from '../CarDetail/CarDetail';
@@ -6,8 +6,7 @@ import api from '../../../../../api'
 import CommonProps from '../../../../../components/HOC/CommonProps';
 import { openNotification } from '../../../../../utils/util';
 import constants from '../../../../../utils/constants';
-import { getBrand, getDefault } from '../../../../../utils/carUtil';
-import { Space } from 'antd';
+import { getColumns } from '../carUtil';
 import QueryParam from '../../../../../modle/QueryParam';
 import CommonContext from '../../../../../components/CommonContext';
 import spinLoading from '../../../../../store/actions/loadingAciton';
@@ -15,9 +14,10 @@ import spinLoading from '../../../../../store/actions/loadingAciton';
 const CarList = (props) => {
     const DetailInfoContext = CommonContext; // context传递上下文
     const userId = new QueryParam({ key: 'userId', value: props.currentUser.userid }); // 用户Id
-    const currentOperation = { type: '', lbl: '' }; // 进行的操作
+    const [currOperate, setCurrOperate] = useState({ type: '', lbl: '' }); // 进行的操作
     const [carList, setCarList] = useState(null); // 汽车列表
     const [detailInfo, setDetailInfo] = useState({ // 汽车详细信息
+        id: '',
         name: '',
         brand: 0,
         isDefault: 0,
@@ -50,13 +50,11 @@ const CarList = (props) => {
      * 模态窗口OK按钮点击
      */
     const handleOK = () => {
-        console.log('curr',currentOperation)
-        if (constants.operation.create === currentOperation.type) {
+        if (constants.operation.create === currOperate.type) {
             createCarRequest(detailInfo);
-        } else if (constants.operation.update === currentOperation.type) {
+        } else if (constants.operation.update === currOperate.type) {
+            editCarQuest(detailInfo);
         }
-        console.log('id',detailInfo)
-        editCarQuest(detailInfo.id);
         hideModal();
     }
 
@@ -72,6 +70,7 @@ const CarList = (props) => {
      */
     const clearCarInfo = () => {
         setDetailInfo({
+            id: '',
             name: '',
             brand: 0,
             isDefault: 0,
@@ -84,8 +83,10 @@ const CarList = (props) => {
      * 创建汽车信息
      */
     const createCarInfo = () => {
-        currentOperation.type = constants.operation.create; // create操作
-        currentOperation.lbl = intl.get('CarList_lbl_btn_create'); // 新建
+        setCurrOperate({
+            type: constants.operation.create, // create操作
+            lbl: intl.get('CarList_lbl_btn_create') // 新建
+        });
         showModal();
         clearCarInfo();
     }
@@ -126,10 +127,11 @@ const CarList = (props) => {
      * @param {*} record 
      */
     const editCar = async record => {
-        currentOperation.type=constants.operation.update;
-        currentOperation.lbl=intl.get('CarList_lbl_edit');
+        setCurrOperate({
+            type: constants.operation.update, // update操作
+            lbl: intl.get('CarList_lbl_edit') // 编辑
+        });
         const queryParams = new QueryParam({ key: 'id', value: record.id });
-        detailInfo.id = record.id;
         const paramList = [];
         paramList.push(queryParams);
         spinLoading(true);
@@ -139,6 +141,7 @@ const CarList = (props) => {
                 spinLoading(false);
                 showModal();
                 setDetailInfo({
+                    id: data.data[0].id,
                     name: data.data[0].name,
                     brand: data.data[0].brand,
                     isDefault: data.data[0].isDefault,
@@ -153,7 +156,7 @@ const CarList = (props) => {
             }
         } catch (error) {
             openNotification({
-                type: constants.notifiction.error,
+                type: constants.notifiction.type.error,
                 messaage: error.message
             })
         }
@@ -165,9 +168,9 @@ const CarList = (props) => {
      * 更新汽车信息
      * @param {*} id 
      */
-    const editCarQuest = id => {
+    const editCarQuest = carInfo => {
         spinLoading(true);
-        api.carBill.editCar(id)
+        api.carBill.editCar(carInfo)
             .then(data => {
                 spinLoading(false);
                 if (data.isOk) {
@@ -226,6 +229,10 @@ const CarList = (props) => {
     }
 
 
+    /**
+     * 删除汽车信息
+     * @param {*} id 
+     */
     const deleteCar = id => {
         props.spinLoading(true);
         api.carBill.deleteCar({ id })
@@ -269,59 +276,22 @@ const CarList = (props) => {
         });
     }
 
-    const columns = [
-        {
-            title: intl.get('CarList_lbl_name'), // 汽车名
-            dataIndex: 'name',
-            key: 'name'
-        },
-        {
-            title: intl.get('CarList_lbl_brand'), // 品牌
-            dataIndex: 'brand',
-            key: 'brand',
-            render: brand => getBrand(brand)
-        },
-        {
-            title: intl.get('CarList_lbl_default'), // 默认
-            dataIndex: 'isDefault',
-            key: 'isDefault',
-            render: isDefault => getDefault(isDefault)
-        },
-        {
-            title: intl.get('CarList_lbl_note'), // 备注
-            dataIndex: 'note',
-            key: 'note'
-        },
-        {
-            title: intl.get('CarList_lbl_action'), // 操作
-            dataIndex: 'action',
-            key: 'action',
-            render: (text, record, index) => (
-                <Space size='middle'>
-                    <a onClick={editCar.bind(this, record)}>{intl.get('CarList_lbl_edit')}</a>
-                    <a onClick={deleteCar.bind(this, record.id)}>{intl.get('CarList_lbl_delete')}</a>
-                </Space>
-            )
-        }
-    ]
-
     return (
         <>
             <div>
                 <Button onClick={createCarInfo}>{intl.get('CarList_lbl_btn_create')}</Button>
             </div>
 
-            <Table columns={columns} dataSource={carList} />
+            <Table columns={getColumns({ editCar, deleteCar })} dataSource={carList} />
 
             <Modal visible={modalVisible} maskClosable={false}
                 // TODO: title的文字更新
-                title={intl.get('CarList_lbl_title', { param: currentOperation.lbl })}
+                title={intl.get('CarList_lbl_title', { param: currOperate.lbl })}
                 onOk={handleOK} onCancel={handleCancel}
                 footer={[
                     <Button type='primary' key='ok' onClick={handleOK}>{intl.get('CarList_lbl_btn_ok')}</Button>,
                     <Button key='return' onClick={handleCancel}>{intl.get('CarList_lbl_btn_cancel')}</Button>
                 ]}>
-                {/* <CarDetail getCarInfo={getCarInfo} detailCarInfo={detailCarInfo} /> */}
                 <DetailInfoContext.Provider value={detailInfo}>
                     <CarDetail />
                 </DetailInfoContext.Provider>
