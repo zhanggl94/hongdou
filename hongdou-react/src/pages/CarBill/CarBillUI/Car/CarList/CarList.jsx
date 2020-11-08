@@ -285,7 +285,6 @@ const CarList = (props) => {
             <Table columns={getColumns({ editCar, deleteCar })} dataSource={carList} />
 
             <Modal visible={modalVisible} maskClosable={false}
-                // TODO: title的文字更新
                 title={intl.get('CarList_lbl_title', { param: currOperate.lbl })}
                 onOk={handleOK} onCancel={handleCancel}
                 footer={[

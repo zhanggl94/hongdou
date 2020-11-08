@@ -25,7 +25,7 @@
     "CarUI_lbl_car":"Car",
     "CarUI_lbl_bill_type":"Bill Type",
     "CarUI_lbl_bill":"Car Bill",
-    "CarList_lbl_title":"{param} Car Info",
+    "CarList_lbl_title":"{param}-Car Info",
     "CarList_lbl_create":"create",
     "CarList_lbl_edit":"edit",
     "CarList_lbl_delete":"delete",

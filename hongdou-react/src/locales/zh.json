@@ -25,7 +25,7 @@
     "CarUI_lbl_car":"汽车",
     "CarUI_lbl_bill_type":"消费种类",
     "CarUI_lbl_bill":"账单",
-    "CarList_lbl_title":"{param}汽车信息",
+    "CarList_lbl_title":"{param}-汽车信息",
     "CarList_lbl_create":"新建",
     "CarList_lbl_edit":"编辑",
     "CarList_lbl_delete":"删除",
