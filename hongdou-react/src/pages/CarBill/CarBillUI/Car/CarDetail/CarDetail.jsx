@@ -8,14 +8,14 @@ import './style.less';
 
 const CarDetail = props => {
     const detailCarInfo = useContext(CommonContext);
-
+    console.log('brandMap', carUtil.brandMap);
     const [carInfo, setCarInfo] = useState({});
 
     useEffect(() => {
         console.log('carInfo', detailCarInfo);
     }, [detailCarInfo])
 
-    console.log('detail',detailCarInfo);
+    console.log('detail', detailCarInfo);
     const handleFormChanged = (type, e) => {
         switch (type) {
             case 'Input':
@@ -26,16 +26,15 @@ const CarDetail = props => {
                 setCarInfo({ name: carInfo.name, brand: e, isDefault: carInfo.isDefault, note: carInfo.note });
                 detailCarInfo.brand = e;
                 break;
-                case 'Checkbox':
-                    setCarInfo({ name: carInfo.name, brand: carInfo.brand, isDefault: e.target.checked ? 1 : 0, note: carInfo.note });
-                    detailCarInfo.isDefault = e.target.checked ? 1 : 0;
+            case 'Checkbox':
+                setCarInfo({ name: carInfo.name, brand: carInfo.brand, isDefault: e.target.checked ? 1 : 0, note: carInfo.note });
+                detailCarInfo.isDefault = e.target.checked ? 1 : 0;
                 break;
             case 'TextArea':
                 setCarInfo({ name: carInfo.name, brand: carInfo.brand, isDefault: carInfo.isDefault, note: e.target.value });
                 detailCarInfo.note = e.target.value;
                 break;
         }
-        // props.getCarInfo(carInfo);
     }
 
     const { Option } = Select;
@@ -54,8 +53,8 @@ const CarDetail = props => {
                 <Col span={2}></Col>
                 <Col span={10}>
                     <Select style={{ width: '100%' }} onChange={handleFormChanged.bind(this, 'Select')} defaultValue={detailCarInfo.brand}>
-                        {carUtil.brandList.map(item => (
-                            <Option key={item} value={item}>{carUtil.getBrand(item)}</Option>
+                        {Array.from(carUtil.brandMap).map(item => (
+                            <Option key={item[0]} value={item[0]}>{item[1]}</Option>
                         ))}
                     </Select>
                 </Col>

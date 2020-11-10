@@ -56,6 +56,7 @@
     "CarDetail_lbl_brand":"品牌",
     "CarDetail_lbl_default":"默认",
     "CarDetail_lbl_note":"备注",
+    "BillList_lbl_title":"账单信息",
     "BillList_lbl_carName":"汽车名",
     "BillList_lbl_date":"日期",
     "BillList_lbl_bill_type":"类别",
@@ -63,5 +64,19 @@
     "BillList_lbl_discount":"优惠",
     "BillList_lbl_total":"总金额",
     "BillList_lbl_pay_type":"付款方式",
-    "BillList_lbl_unit_price":"单价"
+    "BillList_lbl_unit_price":"单价",
+    "BillList_lbl_create":"新建",
+    "BillList_lbl_edit":"编辑",
+    "BillList_lbl_delete":"删除",
+    "BillDetail_lbl_carName":"汽车名",
+    "BillDetail_lbl_carName_placeholder":"请查找汽车名称",
+    "BillDetail_lbl_date":"日期",
+    "BillDetail_lbl_bill_type":"类别",
+    "BillDetail_lbl_actual":"实际花费",
+    "BillDetail_lbl_discount":"优惠",
+    "BillDetail_lbl_total":"总金额",
+    "BillDetail_lbl_pay_type":"付款方式",
+    "BillDetail_lbl_unit_price":"单价",
+    "BillDetail_lbl_place":"地点",
+    "BillDetail_lbl_note":"备注"
 }

@@ -56,6 +56,7 @@
     "CarDetail_lbl_brand":"Car Brand",
     "CarDetail_lbl_default":"Default",
     "CarDetail_lbl_note":"Node",
+    "BillList_lbl_title":"Bill Info",
     "BillList_lbl_carName":"Car Name",
     "BillList_lbl_date":"Date",
     "BillList_lbl_bill_type":"Bill Type",
@@ -63,5 +64,19 @@
     "BillList_lbl_discount":"Discount",
     "BillList_lbl_total":"Total",
     "BillList_lbl_pay_type":"Pay Type",
-    "BillList_lbl_unit_price":"Unit Price"
+    "BillList_lbl_unit_price":"Unit Price",
+    "BillList_lbl_create":"Create",
+    "BillList_lbl_edit":"Edit",
+    "BillList_lbl_delete":"Delete",
+    "BillDetail_lbl_carName":"Car Name",
+    "BillDetail_lbl_carName_placeholder":"Please search car name",
+    "BillDetail_lbl_date":"Date",
+    "BillDetail_lbl_bill_type":"Bill Type",
+    "BillDetail_lbl_actual":"Actual",
+    "BillDetail_lbl_discount":"Discount",
+    "BillDetail_lbl_total":"Total",
+    "BillDetail_lbl_pay_type":"Pay Type",
+    "BillDetail_lbl_unit_price":"Unit Price",
+    "BillDetail_lbl_place":"Place",
+    "BillDetail_lbl_note":"Note"
 }
