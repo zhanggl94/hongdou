@@ -1,6 +1,6 @@
 import { Checkbox, Col, Input, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import intl from 'react-intl-universal';
 import CommonContext from '../../../../../components/CommonContext';
 import * as carUtil from '../carUtil';
@@ -8,14 +8,8 @@ import './style.less';
 
 const CarDetail = props => {
     const detailCarInfo = useContext(CommonContext);
-    console.log('brandMap', carUtil.brandMap);
     const [carInfo, setCarInfo] = useState({});
-
-    useEffect(() => {
-        console.log('carInfo', detailCarInfo);
-    }, [detailCarInfo])
-
-    console.log('detail', detailCarInfo);
+    
     const handleFormChanged = (type, e) => {
         switch (type) {
             case 'Input':
@@ -53,7 +47,7 @@ const CarDetail = props => {
                 <Col span={2}></Col>
                 <Col span={10}>
                     <Select style={{ width: '100%' }} onChange={handleFormChanged.bind(this, 'Select')} defaultValue={detailCarInfo.brand}>
-                        {Array.from(carUtil.brandMap).map(item => (
+                        {Array.from(carUtil.getBrandMap()).map(item => (
                             <Option key={item[0]} value={item[0]}>{item[1]}</Option>
                         ))}
                     </Select>

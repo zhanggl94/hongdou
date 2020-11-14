@@ -45,7 +45,8 @@ export const getColumns = (props) => {
 /**
  * 汽车账单类型
  */
-export const billTypeMap = new Map()
+export const getBillTypeMap = ()=>{
+    return new Map()
     .set(0, '裸车')
     .set(1, '保险')
     .set(2, '购置税')
@@ -54,13 +55,16 @@ export const billTypeMap = new Map()
     .set(5, '停车')
     .set(6, '维修')
     .set(7, '配件购买')
-    .set(999, '其他')
+    .set(999, '其他');
+}
 
-export const payTypeMap = new Map()
-.set(0,'微信')
-.set(1,'支付宝')
-.set(2,'银联云闪付')
-.set(3,'刷卡')
-.set(4,'丰云行APP')
-.set(5,'停车券')
-.set(999,'其他')
+export const getPayTypeMap = ()=>{
+    return new Map()
+    .set(0,'微信')
+    .set(1,'支付宝')
+    .set(2,'银联云闪付')
+    .set(3,'刷卡')
+    .set(4,'丰云行APP')
+    .set(5,'停车券')
+    .set(999,'其他');
+}
