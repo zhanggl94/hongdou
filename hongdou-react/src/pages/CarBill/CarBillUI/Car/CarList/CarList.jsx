@@ -6,7 +6,7 @@ import api from '../../../../../api'
 import CommonProps from '../../../../../components/HOC/CommonProps';
 import { openNotification } from '../../../../../utils/util';
 import constants from '../../../../../utils/constants';
-import { getColumns } from '../carUtil';
+import { getColumns, searchCarQuest } from '../carUtil';
 import QueryParam from '../../../../../modle/QueryParam';
 import CommonContext from '../../../../../components/CommonContext';
 import spinLoading from '../../../../../store/actions/loadingAciton';
@@ -261,20 +261,20 @@ const CarList = (props) => {
             });
     }
 
-    /**
-     * 查询汽车信息
-     * @param {*} data 
-     */
-    const searchCarQuest = data => {
-        return new Promise((resolve, reject) => {
-            api.carBill.searchCar(data)
-                .then(data => {
-                    resolve(data);
-                }).catch(error => {
-                    reject(error);
-                })
-        });
-    }
+    // /**
+    //  * 查询汽车信息
+    //  * @param {*} data 
+    //  */
+    // const searchCarQuest = data => {
+    //     return new Promise((resolve, reject) => {
+    //         api.carBill.searchCar(data)
+    //             .then(data => {
+    //                 resolve(data);
+    //             }).catch(error => {
+    //                 reject(error);
+    //             })
+    //     });
+    // }
 
     return (
         <>

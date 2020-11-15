@@ -1,6 +1,7 @@
 import React from 'react';
 import { Space } from 'antd';
 import intl from 'react-intl-universal';
+import api from '../../../../api'
 
 export const getBrandMap = () => {
     return new Map()
@@ -13,6 +14,10 @@ export const getBrandMap = () => {
 
 export const getDefault = isDefault => isDefault ? '*' : '-';
 
+/**
+ * 获取汽车列表的列信息
+ * @param {*} props 传递的参数
+ */
 export const getColumns = props => {
 
     const columns = [
@@ -56,4 +61,19 @@ export const getColumns = props => {
         columns.push(operate);
     }
     return columns;
+}
+
+/**
+ * 查询汽车信息
+ * @param {*} data 
+ */
+export const searchCarQuest = data => {
+    return new Promise((resolve, reject) => {
+        api.carBill.searchCar(data)
+            .then(data => {
+                resolve(data);
+            }).catch(error => {
+                reject(error);
+            })
+    });
 }

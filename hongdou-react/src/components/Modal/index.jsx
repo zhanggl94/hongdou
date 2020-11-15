@@ -40,7 +40,7 @@ const ModalComponent = props => {
     }
 
     return (
-        <Modal width={'100%'} visible={modalVisible} maskClosable={false}
+        <Modal width={'80%'} visible={modalVisible} maskClosable={false}
             onOk={handleOk} onCancel={handleCancel}>
             <Search columns={props.columns} />
         </Modal>
