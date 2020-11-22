@@ -3,7 +3,6 @@ import intl from 'react-intl-universal';
 import { Table, Button, Modal } from 'antd';
 import BillDetail from '../BillDetail/BillDetail';
 import { getColumns } from '../billUtil';
-import BillDetailContext from '../../../../../components/CommonContext';
 
 const BillList = props => {
 
@@ -59,7 +58,7 @@ const BillList = props => {
                 <Table dataSource={dataSource} columns={getColumns()} />
                 <Modal title={intl.get('BillList_lbl_title')} width={'100%'} visible={modalVisible}
                     onOk={handleOk} onCancel={handleCancel}>
-                    <BillDetail></BillDetail>
+                    <BillDetail />
                 </Modal>
             </div>
         </>

@@ -261,21 +261,6 @@ const CarList = (props) => {
             });
     }
 
-    // /**
-    //  * 查询汽车信息
-    //  * @param {*} data 
-    //  */
-    // const searchCarQuest = data => {
-    //     return new Promise((resolve, reject) => {
-    //         api.carBill.searchCar(data)
-    //             .then(data => {
-    //                 resolve(data);
-    //             }).catch(error => {
-    //                 reject(error);
-    //             })
-    //     });
-    // }
-
     return (
         <>
             <div>

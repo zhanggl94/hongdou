@@ -9,24 +9,21 @@ import './style.less';
 const CarDetail = props => {
     const detailCarInfo = useContext(CommonContext);
     const [carInfo, setCarInfo] = useState({});
-    
+
     const handleFormChanged = (type, e) => {
         switch (type) {
             case 'Input':
-                setCarInfo({ name: e.target.value, brand: carInfo.brand, isDefault: carInfo.isDefault, note: carInfo.note });
+            case 'TextArea':
+                setCarInfo({ ...carInfo, [e.target.name]: e.target.value });
                 detailCarInfo[e.target.name] = e.target.value;
                 break;
             case 'Select':
-                setCarInfo({ name: carInfo.name, brand: e, isDefault: carInfo.isDefault, note: carInfo.note });
+                setCarInfo({ ...carInfo, brand: e });
                 detailCarInfo.brand = e;
                 break;
             case 'Checkbox':
-                setCarInfo({ name: carInfo.name, brand: carInfo.brand, isDefault: e.target.checked ? 1 : 0, note: carInfo.note });
+                setCarInfo({ ...carInfo, isDefault: e.target.checked ? 1 : 0 });
                 detailCarInfo.isDefault = e.target.checked ? 1 : 0;
-                break;
-            case 'TextArea':
-                setCarInfo({ name: carInfo.name, brand: carInfo.brand, isDefault: carInfo.isDefault, note: e.target.value });
-                detailCarInfo.note = e.target.value;
                 break;
         }
     }

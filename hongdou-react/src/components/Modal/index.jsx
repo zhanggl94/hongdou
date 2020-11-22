@@ -1,8 +1,8 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState, useMemo } from 'react';
 import { Modal } from 'antd';
 import Search from '../Search/Search';
 
-const ModalComponent = props => {
+const ModalComponent = React.memo(props => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -35,16 +35,21 @@ const ModalComponent = props => {
     /**
      * 关闭窗口
      */
-    const closeModal = () => {
+    const closeModal = (record) => {
         setModalVisible(false);
+        props.closeCallback(record);
+    }
+
+    const clickData = record=>{
+        closeModal(record);
     }
 
     return (
         <Modal width={'80%'} visible={modalVisible} maskClosable={false}
             onOk={handleOk} onCancel={handleCancel}>
-            <Search columns={props.columns} />
+            <Search columns={props.columns} dataSource={props.dataSource} clickData={clickData} />
         </Modal>
     );
-}
+});
 
 export default ModalComponent;

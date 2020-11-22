@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Home = () => {
     return (
         <div className='container'>
-            <ul class='anticons-list'>
+            <ul className='anticons-list'>
                 <li className='TwoTone'>
                     <Link to='/carbill'>
                         <CarTwoTone />

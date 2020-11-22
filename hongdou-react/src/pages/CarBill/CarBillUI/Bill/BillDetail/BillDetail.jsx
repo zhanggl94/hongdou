@@ -1,24 +1,70 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Input, DatePicker, Select, InputNumber } from 'antd';
 import { getBillTypeMap, getPayTypeMap } from '../billUtil';
 import './style.less';
 import ModalComponent from '../../../../../components/Modal';
-import { getColumns as carColumns } from '../../Car/carUtil';
+import { getColumns as carColumns, searchCarQuest } from '../../Car/carUtil';
+import { openNotification } from '../../../../../utils/util';
+import constants from '../../../../../utils/constants';
+import CommonProps from '../../../../../components/HOC/CommonProps';
+import QueryParam from '../../../../../modle/QueryParam';
 
 const { Search } = Input;
 const { Option } = Select;
 
-const BillDetail = (props) => {
+const BillDetail = props => {
     const searchRef = useRef();
+    const currUserId = props.auth.currentUser.userid;
+    const [searchCarInfo, setSearchCarInfo] = useState(null);
+    const [billDetail, setBillDetail] = useState(null);
 
-    const handleCarSearch = id => {
-        if (searchRef.current) {
-            searchRef.current.openModal();
+    /**
+     * 获取汽车信息(API请求)
+     * @param {*} data 
+     */
+    const getSearchCarInfo = async data => {
+        const result = await searchCarQuest(data);
+        try {
+            if (result.isOk) {
+                setSearchCarInfo(result.data.map(item => { item.key = item.id; return item }));
+            } else {
+                openNotification({
+                    type: constants.notifiction.type.warning,
+                    message: result.message
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            openNotification({
+                type: constants.notifiction.type.error,
+                message: error.message
+            });
         }
     }
 
-    const handleChange = () => {
+    /**
+     * 检索汽车信息
+     * @param {*} id 
+     */
+    const handleCarSearch = async () => {
+        if (searchRef.current) {
+            searchRef.current.openModal();
+            await getSearchCarInfo([
+                new QueryParam({ key: 'userId', value: currUserId })
+            ]);
+        }
+    }
+
+    /**
+     * 查询页面关闭后的回调事件
+     * @param {*} carInfo 汽车信息
+     */
+    const handleCloseModal = carInfo=>{
+        
+    }
+
+    const handleFormChange = () => {
 
     }
 
@@ -38,7 +84,7 @@ const BillDetail = (props) => {
                         <span>{intl.get('BillDetail_lbl_date')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <DatePicker onChange={handleChange} />
+                        <DatePicker onChange={handleFormChange} />
                     </div>
                 </div>
                 <div className='row'>
@@ -116,9 +162,9 @@ const BillDetail = (props) => {
                     </div>
                 </div>
             </div >
-            <ModalComponent cRef={searchRef} columns={carColumns({hideOperate:true})} />
+            <ModalComponent cRef={searchRef} columns={carColumns({ hideOperate: true })} dataSource={searchCarInfo} closeCallback={handleCloseModal} />
         </>
     );
 }
 
-export default BillDetail;
+export default CommonProps(BillDetail);
