@@ -13,7 +13,7 @@ import spinLoading from '../../../../../store/actions/loadingAciton';
 
 const CarList = (props) => {
     const DetailInfoContext = CommonContext; // context传递上下文
-    const userId = new QueryParam({ key: 'userId', value: props.currentUser.userid }); // 用户Id
+    const searchAllCarParamList = new QueryParam([{ key: 'userId', value: props.currentUser.userid }]); // 用户Id
     const [currOperate, setCurrOperate] = useState({ type: '', lbl: '' }); // 进行的操作
     const [carList, setCarList] = useState(null); // 汽车列表
     const [detailInfo, setDetailInfo] = useState({ // 汽车详细信息
@@ -27,7 +27,7 @@ const CarList = (props) => {
 
     //页面初期化时，加载汽车列表
     useEffect(() => {
-        searchAllCar([userId]);
+        searchAllCar(searchAllCarParamList);
     }, []);
 
     const [modalVisible, setModalVisible] = useState(false); // 模态窗口的显示标志
@@ -131,12 +131,9 @@ const CarList = (props) => {
             type: constants.operation.update, // update操作
             lbl: intl.get('CarList_lbl_edit') // 编辑
         });
-        const queryParams = new QueryParam({ key: 'id', value: record.id });
-        const paramList = [];
-        paramList.push(queryParams);
         spinLoading(true);
         try {
-            const data = await searchCarQuest(paramList);
+            const data = await searchCarQuest(new QueryParam([{ key: 'id', value: record.id }]));
             if (data.isOk) {
                 spinLoading(false);
                 showModal();
@@ -178,7 +175,7 @@ const CarList = (props) => {
                         type: constants.notifiction.type.success,
                         message: intl.get('CarList_msg_update_success')
                     });
-                    searchAllCar([userId]);
+                    searchAllCar(searchAllCarParamList);
                 } else {
                     openNotification({
                         type: constants.notifiction.type.warning,
@@ -210,7 +207,7 @@ const CarList = (props) => {
                         type: constants.notifiction.type.success,
                         message: intl.get('CarList_msg_create_success')
                     });
-                    searchAllCar([userId]);
+                    searchAllCar(searchAllCarParamList);
                 } else {
                     openNotification({
                         type: constants.notifiction.type.warning,
@@ -243,7 +240,7 @@ const CarList = (props) => {
                         type: constants.notifiction.type.success,
                         message: intl.get('CarList_msg_delete_success')
                     });
-                    searchAllCar([userId]);
+                    searchAllCar(searchAllCarParamList);
                 } else {
                     openNotification({
                         type: constants.notifiction.type.warning,

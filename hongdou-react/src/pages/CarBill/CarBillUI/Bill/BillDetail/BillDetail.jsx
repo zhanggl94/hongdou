@@ -17,7 +17,22 @@ const BillDetail = props => {
     const searchRef = useRef();
     const currUserId = props.auth.currentUser.userid;
     const [searchCarInfo, setSearchCarInfo] = useState(null);
-    const [billDetail, setBillDetail] = useState(null);
+    const [billDetail, setBillDetail] = useState({
+        carInfo: { // 汽车信息
+            id: '', // id
+            name: '' // 名称
+        },
+        date: '', // 日期
+        billType: '', // 账单类型
+        payType: '', // 支付种类
+        actual: 0, // 实际花费金额
+        discount: 0, // 优惠金额
+        unitPrice: 0, // 单价
+        place: '', // 地点
+        note: '' // 备注
+    });
+
+    console.log('load', billDetail.carInfo)
 
     /**
      * 获取汽车信息(API请求)
@@ -50,9 +65,9 @@ const BillDetail = props => {
     const handleCarSearch = async () => {
         if (searchRef.current) {
             searchRef.current.openModal();
-            await getSearchCarInfo([
-                new QueryParam({ key: 'userId', value: currUserId })
-            ]);
+            await getSearchCarInfo(
+                new QueryParam([{ key: 'userId', value: currUserId }])
+            );
         }
     }
 
@@ -60,12 +75,35 @@ const BillDetail = props => {
      * 查询页面关闭后的回调事件
      * @param {*} carInfo 汽车信息
      */
-    const handleCloseModal = carInfo=>{
-        
+    const handleCloseModal = carInfo => {
+        handleFormChange(carInfo, 'carInfo');
     }
 
-    const handleFormChange = () => {
+    /**
+     * 账单详情内容变更
+     * @param {*} data 数据
+     * @param {*} type 类型
+     */
+    const handleFormChange = (type, data) => {
+        let changeElement;
+        console.log('data', data);
+        console.log('type', type);
+        switch (type) {
+            case 'carInfo':
+                changeElement = { 'carInfo': data };
+            case 'DatePicker':
 
+                break;
+            case 'Select':
+                break;
+            case 'InputNumber':
+                break;
+            case 'Input':
+
+
+        }
+        // setBillDetail({ ...billDetail, [type]: data })
+        console.log('账单详情', billDetail);
     }
 
     return (
@@ -77,14 +115,14 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_carName')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <Search placeholder={intl.get('BillDetail_lbl_carName_placeholder')} onSearch={handleCarSearch} enterButton />
+                        <Search placeholder={intl.get('BillDetail_lbl_carName_placeholder')} value={billDetail.carInfo.name} onSearch={handleCarSearch} enterButton />
                     </div>
                     {/* 日期 */}
                     <div className='textRight width_25_per'>
                         <span>{intl.get('BillDetail_lbl_date')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <DatePicker onChange={handleFormChange} />
+                        <DatePicker name='date' value={billDetail.date} onChange={handleFormChange.bind(this, 'DatePicker')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -93,7 +131,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_bill_type')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <Select style={{ width: '100%' }}>
+                        <Select name='billType' style={{ width: '100%' }} defaultValue={billDetail.billType} onChange={handleFormChange.bind(this, 'Select')}>
                             {Array.from(getBillTypeMap()).map(item => (
                                 <Option key={item[0]} value={item[0]}>{item[1]}</Option>
                             ))}
@@ -104,7 +142,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_pay_type')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <Select style={{ width: '100%' }} mode="multiple">
+                        <Select name='payType' style={{ width: '100%' }} defaultValue={billDetail.payType} onChange={handleFormChange.bind(this, 'Select')} mode="multiple">
                             {Array.from(getPayTypeMap()).map(item => (
                                 <Option key={item[0]} value={item[0]}>{item[1]}</Option>
                             ))}
@@ -117,14 +155,14 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_actual')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber />
+                        <InputNumber name='actual' defaultValue={billDetail.actual} onChange={handleFormChange.bind(this, 'InputNumber')} />
                     </div>
                     {/* 优惠金额 */}
                     <div className='textRight width_25_per'>
                         <span>{intl.get('BillDetail_lbl_discount')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber />
+                        <InputNumber name='discount' defaultValue={billDetail.discount} onChange={handleFormChange.bind(this, 'InputNumber')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -133,14 +171,14 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_total')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber disabled={true} />
+                        <InputNumber name='total' defaultValue={billDetail.actual + billDetail.discount} disabled={true} />
                     </div>
                     {/* 单价 */}
                     <div className='textRight width_25_per'>
                         <span>{intl.get('BillDetail_lbl_unit_price')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber />
+                        <InputNumber name='unitPrice' defaultValue={billDetail.unitPrice} onChange={handleFormChange.bind(this, 'InputNumber')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -149,7 +187,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_place')}：</span>
                     </div>
                     <div className='textLeft width_75_per'>
-                        <Input />
+                        <Input name='place' defaultValue={billDetail.place} onChange={handleFormChange.bind(this, 'Input')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -158,7 +196,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_note')}：</span>
                     </div>
                     <div className='textLeft width_75_per'>
-                        <Input.TextArea rows={5} />
+                        <Input.TextArea name='note' rows={5} defaultValue={billDetail.note} onChange={handleFormChange.bind(this, 'Input')} />
                     </div>
                 </div>
             </div >
