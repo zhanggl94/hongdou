@@ -76,7 +76,17 @@ const BillDetail = props => {
      * @param {*} carInfo 汽车信息
      */
     const handleCloseModal = carInfo => {
-        handleFormChange(carInfo, 'carInfo');
+        handleFormChange('carInfo', carInfo);
+    }
+
+    /**
+     * 日期控件变更回调事件
+     * @param {*} date 
+     * @param {*} dateStr 
+     */
+    const handleDateChange = (date, dateStr) => {
+        console.log(date,dateStr);
+        handleFormChange('DatePicker', { date, dateStr });
     }
 
     /**
@@ -84,19 +94,22 @@ const BillDetail = props => {
      * @param {*} data 数据
      * @param {*} type 类型
      */
-    const handleFormChange = (type, data) => {
+    const handleFormChange = (type, data,) => {
         let changeElement;
         console.log('data', data);
         console.log('type', type);
         switch (type) {
             case 'carInfo':
                 changeElement = { 'carInfo': data };
+                break;
             case 'DatePicker':
-
+                changeElement = { 'date': data.dateStr };
                 break;
             case 'Select':
+                changeElement = { 'billType':data};
                 break;
             case 'InputNumber':
+                changeElement = { 'billType':data};
                 break;
             case 'Input':
 
@@ -122,7 +135,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_date')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <DatePicker name='date' value={billDetail.date} onChange={handleFormChange.bind(this, 'DatePicker')} />
+                        <DatePicker name='date' onChange={handleDateChange.bind(this)} />
                     </div>
                 </div>
                 <div className='row'>
