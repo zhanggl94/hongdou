@@ -36,8 +36,7 @@ const BillDetail = props => {
     });
 
     useEffect(() => {
-        parentDetailInfo = billDetail;
-        console.log('子页面',parentDetailInfo);
+        parentDetailInfo = Object.assign(parentDetailInfo, billDetail);
     }, [billDetail]);
 
     /**
