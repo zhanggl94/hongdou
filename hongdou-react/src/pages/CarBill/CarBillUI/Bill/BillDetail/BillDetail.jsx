@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Input, DatePicker, Select, InputNumber } from 'antd';
 import { getBillTypeMap, getPayTypeMap } from '../billUtil';
@@ -9,11 +9,13 @@ import { openNotification } from '../../../../../utils/util';
 import constants from '../../../../../utils/constants';
 import CommonProps from '../../../../../components/HOC/CommonProps';
 import QueryParam from '../../../../../modle/QueryParam';
+import CommonContext from '../../../../../components/CommonContext';
 
 const { Search } = Input;
 const { Option } = Select;
 
 const BillDetail = props => {
+    let parentDetailInfo = useContext(CommonContext);
     const searchRef = useRef();
     const currUserId = props.auth.currentUser.userid;
     const [searchCarInfo, setSearchCarInfo] = useState(null);
@@ -27,12 +29,16 @@ const BillDetail = props => {
         payType: '', // 支付种类
         actual: 0, // 实际花费金额
         discount: 0, // 优惠金额
+        total: 0, // 总金额
         unitPrice: 0, // 单价
         place: '', // 地点
         note: '' // 备注
     });
 
-    console.log('load', billDetail.carInfo)
+    useEffect(() => {
+        parentDetailInfo = billDetail;
+        console.log('子页面',parentDetailInfo);
+    }, [billDetail]);
 
     /**
      * 获取汽车信息(API请求)
@@ -76,7 +82,7 @@ const BillDetail = props => {
      * @param {*} carInfo 汽车信息
      */
     const handleCloseModal = carInfo => {
-        handleFormChange('carInfo', carInfo);
+        handleFormChange('carInfo', '', carInfo);
     }
 
     /**
@@ -85,19 +91,17 @@ const BillDetail = props => {
      * @param {*} dateStr 
      */
     const handleDateChange = (date, dateStr) => {
-        console.log(date,dateStr);
-        handleFormChange('DatePicker', { date, dateStr });
+        handleFormChange('DatePicker', '', { date, dateStr });
     }
 
     /**
      * 账单详情内容变更
      * @param {*} data 数据
+     * @param {*} name 对象key
      * @param {*} type 类型
      */
-    const handleFormChange = (type, data,) => {
+    const handleFormChange = (type, name, data) => {
         let changeElement;
-        console.log('data', data);
-        console.log('type', type);
         switch (type) {
             case 'carInfo':
                 changeElement = { 'carInfo': data };
@@ -106,17 +110,16 @@ const BillDetail = props => {
                 changeElement = { 'date': data.dateStr };
                 break;
             case 'Select':
-                changeElement = { 'billType':data};
+                changeElement = { [name]: data };
                 break;
             case 'InputNumber':
-                changeElement = { 'billType':data};
+                changeElement = { [name]: data, 'total': billDetail.actual + billDetail.discount };
                 break;
             case 'Input':
-
-
+                changeElement = { [data.target.name]: data.target.value };
+                break;
         }
-        // setBillDetail({ ...billDetail, [type]: data })
-        console.log('账单详情', billDetail);
+        setBillDetail({ ...billDetail, ...changeElement });
     }
 
     return (
@@ -144,7 +147,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_bill_type')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <Select name='billType' style={{ width: '100%' }} defaultValue={billDetail.billType} onChange={handleFormChange.bind(this, 'Select')}>
+                        <Select name='billType' style={{ width: '100%' }} defaultValue={billDetail.billType} onChange={handleFormChange.bind(this, 'Select', 'billType')}>
                             {Array.from(getBillTypeMap()).map(item => (
                                 <Option key={item[0]} value={item[0]}>{item[1]}</Option>
                             ))}
@@ -155,7 +158,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_pay_type')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <Select name='payType' style={{ width: '100%' }} defaultValue={billDetail.payType} onChange={handleFormChange.bind(this, 'Select')} mode="multiple">
+                        <Select name='payType' style={{ width: '100%' }} onChange={handleFormChange.bind(this, 'Select', 'payType')} mode="multiple">
                             {Array.from(getPayTypeMap()).map(item => (
                                 <Option key={item[0]} value={item[0]}>{item[1]}</Option>
                             ))}
@@ -168,14 +171,14 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_actual')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber name='actual' defaultValue={billDetail.actual} onChange={handleFormChange.bind(this, 'InputNumber')} />
+                        <InputNumber name='actual' defaultValue={billDetail.actual} onChange={handleFormChange.bind(this, 'InputNumber', 'actual')} />
                     </div>
                     {/* 优惠金额 */}
                     <div className='textRight width_25_per'>
                         <span>{intl.get('BillDetail_lbl_discount')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber name='discount' defaultValue={billDetail.discount} onChange={handleFormChange.bind(this, 'InputNumber')} />
+                        <InputNumber name='discount' defaultValue={billDetail.discount} onChange={handleFormChange.bind(this, 'InputNumber', 'discount')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -184,14 +187,14 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_total')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber name='total' defaultValue={billDetail.actual + billDetail.discount} disabled={true} />
+                        <InputNumber name='total' value={billDetail.total} disabled={true} />
                     </div>
                     {/* 单价 */}
                     <div className='textRight width_25_per'>
                         <span>{intl.get('BillDetail_lbl_unit_price')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber name='unitPrice' defaultValue={billDetail.unitPrice} onChange={handleFormChange.bind(this, 'InputNumber')} />
+                        <InputNumber name='unitPrice' defaultValue={billDetail.unitPrice} onChange={handleFormChange.bind(this, 'InputNumber', 'unitPrice')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -200,7 +203,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_place')}：</span>
                     </div>
                     <div className='textLeft width_75_per'>
-                        <Input name='place' defaultValue={billDetail.place} onChange={handleFormChange.bind(this, 'Input')} />
+                        <Input name='place' defaultValue={billDetail.place} onChange={handleFormChange.bind(this, 'Input', 'place')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -209,7 +212,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_note')}：</span>
                     </div>
                     <div className='textLeft width_75_per'>
-                        <Input.TextArea name='note' rows={5} defaultValue={billDetail.note} onChange={handleFormChange.bind(this, 'Input')} />
+                        <Input.TextArea name='note' rows={5} defaultValue={billDetail.note} onChange={handleFormChange.bind(this, 'Input', 'note')} />
                     </div>
                 </div>
             </div >

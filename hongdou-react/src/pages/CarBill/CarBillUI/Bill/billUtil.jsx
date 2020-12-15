@@ -53,8 +53,9 @@ export const getBillTypeMap = ()=>{
     .set(3, '上牌')
     .set(4, '加油')
     .set(5, '停车')
-    .set(6, '维修')
-    .set(7, '配件购买')
+    .set(6, '轮渡船票')
+    .set(7, '维修')
+    .set(8, '配件购买')
     .set(999, '其他');
 }
 

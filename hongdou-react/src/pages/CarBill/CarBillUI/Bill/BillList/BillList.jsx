@@ -3,11 +3,12 @@ import intl from 'react-intl-universal';
 import { Table, Button, Modal } from 'antd';
 import BillDetail from '../BillDetail/BillDetail';
 import { getColumns } from '../billUtil';
+import CommonContext from '../../../../../components/CommonContext';
 
 const BillList = props => {
-
+    const DetailInfoContext = CommonContext;
     const [modalVisible, setModalVisible] = useState(false)
-
+    const [detailInfo, setDetailInfo] = useState(null);
     const dataSource = [{
         key: '1',
         carName: '丰田',
@@ -28,6 +29,7 @@ const BillList = props => {
      * OK事件
      */
     const handleOk = () => {
+        console.log('父级页面',detailInfo);
         closeModal();
     }
 
@@ -58,7 +60,9 @@ const BillList = props => {
                 <Table dataSource={dataSource} columns={getColumns()} />
                 <Modal title={intl.get('BillList_lbl_title')} width={'100%'} visible={modalVisible}
                     onOk={handleOk} onCancel={handleCancel}>
-                    <BillDetail />
+                    <DetailInfoContext.Provider value={detailInfo}>
+                        <BillDetail />
+                    </DetailInfoContext.Provider>
                 </Modal>
             </div>
         </>
