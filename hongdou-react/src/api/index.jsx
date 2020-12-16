@@ -1,8 +1,10 @@
 import signupRequest from './signup';
 import signinRequest from './signin';
-import carBill from './carBill';
+import carRequest from './car';
+import billRequest from './bill';
 export default {
     signupRequest,
     signinRequest,
-    carBill,
+    carRequest,
+    billRequest
 }

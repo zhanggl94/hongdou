@@ -19,22 +19,8 @@ const BillDetail = props => {
     const searchRef = useRef();
     const currUserId = props.auth.currentUser.userid;
     const [searchCarInfo, setSearchCarInfo] = useState(null);
-    const [billDetail, setBillDetail] = useState({
-        carInfo: { // 汽车信息
-            id: '', // id
-            name: '' // 名称
-        },
-        date: '', // 日期
-        billType: '', // 账单类型
-        payType: '', // 支付种类
-        actual: 0, // 实际花费金额
-        discount: 0, // 优惠金额
-        total: 0, // 总金额
-        unitPrice: 0, // 单价
-        place: '', // 地点
-        note: '' // 备注
-    });
-
+    const [billDetail, setBillDetail] = useState(parentDetailInfo);
+    
     useEffect(() => {
         parentDetailInfo = Object.assign(parentDetailInfo, billDetail);
     }, [billDetail]);

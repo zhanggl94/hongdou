@@ -167,7 +167,7 @@ const CarList = (props) => {
      */
     const editCarQuest = carInfo => {
         spinLoading(true);
-        api.carBill.editCar(carInfo)
+        api.carRequest.edit(carInfo)
             .then(data => {
                 spinLoading(false);
                 if (data.isOk) {
@@ -199,7 +199,7 @@ const CarList = (props) => {
     const createCarRequest = data => {
         props.spinLoading(true);
         data.userId = props.currentUser.userid;
-        api.carBill.createCar(data)
+        api.carRequest.create(data)
             .then(data => {
                 props.spinLoading(false);
                 if (data.isOk) {
@@ -232,7 +232,7 @@ const CarList = (props) => {
      */
     const deleteCar = id => {
         props.spinLoading(true);
-        api.carBill.deleteCar({ id })
+        api.carRequest.delete({ id })
             .then(data => {
                 props.spinLoading(false);
                 if (data.isOk) {

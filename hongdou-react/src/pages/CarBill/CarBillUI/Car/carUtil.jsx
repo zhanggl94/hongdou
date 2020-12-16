@@ -69,7 +69,7 @@ export const getColumns = props => {
  */
 export const searchCarQuest = data => {
     return new Promise((resolve, reject) => {
-        api.carBill.searchCar(data)
+        api.carRequest.search(data)
             .then(data => {
                 resolve(data);
             }).catch(error => {
