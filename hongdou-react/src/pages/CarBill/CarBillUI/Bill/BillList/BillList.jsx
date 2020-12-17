@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { Table, Button, Modal } from 'antd';
 import BillDetail from '../BillDetail/BillDetail';
-import { getColumns } from '../billUtil';
+import { getBillTypeMap, getColumns, getPayTypeMap } from '../billUtil';
 import CommonContext from '../../../../../components/CommonContext';
 import BillDetailModle from '../../../../../modle/BillDetailModle';
 import api from '../../../../../api';
@@ -14,11 +14,12 @@ import QueryParam from '../../../../../modle/QueryParam';
 const BillList = props => {
     const DetailInfoContext = CommonContext;
     const currUserId = props.auth.currentUser.userid; // 当前用户Id
-    const billDetailModle = new BillDetailModle();
+    let billDetailModle = new BillDetailModle();
     billDetailModle.userId = props.auth.currentUser.userid;
-    const [modalVisible, setModalVisible] = useState(false)
-    const [detailInfo, setDetailInfo] = useState(billDetailModle);
-    const [billList, setBillList] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false); // 模态窗口显示/非显示
+    const [detailInfo, setDetailInfo] = useState(billDetailModle); // 账单详细信息页面内容
+    const [billList, setBillList] = useState(null); // 表格数据源
+    const [currOperate, setCurrOperate] = useState({ type: '', lbl: '' }); // 进行的操作
 
     // const dataSource = [{
     //     key: '1',
@@ -37,9 +38,15 @@ const BillList = props => {
      */
     useEffect(() => {
         searchBillRequest(new QueryParam([{ key: 'userId', value: currUserId }]));
+        console.log('init table.')
     }, []);
 
     const handleCreateBillDetail = () => {
+        setCurrOperate({
+            type: constants.operation.create, // create操作
+            lbl: intl.get('BillList_lbl_btn_create') // 新建
+        });
+        clearDetailInfo();
         openModal();
     }
 
@@ -48,6 +55,7 @@ const BillList = props => {
      */
     const handleOk = () => {
         createBillRequest();
+        searchBillRequest(new QueryParam([{ key: 'userId', value: currUserId }]));
         closeModal();
     }
 
@@ -70,6 +78,33 @@ const BillList = props => {
     }
 
     /**
+     * 清除账单详细信息
+     */
+    const clearDetailInfo = () => {
+        setDetailInfo(new BillDetailModle());
+    }
+
+    /**
+     * 账单编辑
+     */
+    const editBill = (id) => {
+        setCurrOperate({
+            type: constants.operation.edit, // edit操作
+            lbl: intl.get('BillList_lbl_btn_edit') // 新建
+        });
+        editBillRequest(new QueryParam([{ key: 'id', value: id }]));
+    }
+
+    /**
+     * 账单删除
+     * @param {*} id 
+     */
+    const deleteBill = async (id) => {
+        await deleteBillRequest(id);
+        searchBillRequest(new QueryParam([{ key: 'userId', value: currUserId }]));
+    }
+
+    /**
      * 查询账单信息
      * @param {*} paramList 
      */
@@ -79,17 +114,16 @@ const BillList = props => {
             const result = await api.billRequest.search(paramList);
             if (result.isOk) {
                 if (result.data?.length) {
-                    console.log('query data:',result.data)
-                    setBillList(result.data);
+                    updateBillList(result.data);
                 } else {
-                    setBillList(null);
+                    updateBillList(null);
                 }
             } else {
                 openNotification({ type: constants.notifiction.type.warning, message: intl.get('BillList_msg_search_failed') + result.message });
             }
         } catch (error) {
             console.error(error);
-            openNotification({ type: constants.notifiction.type.error, message: intl.get('BillList_msg_search_failed')});
+            openNotification({ type: constants.notifiction.type.error, message: intl.get('BillList_msg_search_failed') });
         }
         props.spinLoading(false);
     }
@@ -114,14 +148,115 @@ const BillList = props => {
         props.spinLoading(false);
     }
 
+
+    const editBillRequest = async (paramList) => {
+        props.spinLoading(true);
+        try {
+            const result = await api.billRequest.search(paramList);
+            if (result.isOk) {
+                if (result.data?.length) {
+                    billDetailModle = result.data[0];
+                    billDetailModle.carInfo = { id: '', name: '' };
+                    billDetailModle.carInfo.id = result.data[0].carId;
+                    billDetailModle.carInfo.name = result.data[0].carName;
+                    billDetailModle.date = new Date(result.data[0].date).toLocaleDateString();
+                    billDetailModle.payType = result.data[0].payType.split(',');
+                    billDetailModle.total = result.data[0].actual + result.data[0].discount;
+                    setDetailInfo(billDetailModle);
+                    openModal();
+                }
+            } else {
+                openNotification({ type: constants.notifiction.type.warning, message: intl.get('BillList_msg_search_failed') + result.message });
+            }
+        } catch (error) {
+            console.error(error);
+            openNotification({ type: constants.notifiction.type.error, message: intl.get('BillList_msg_search_failed') });
+        }
+        props.spinLoading(false);
+    }
+
+    /**
+     * 账单更新
+     */
+    const updateBillRequest = async (record) => {
+        props.spinLoading(true);
+        let message = intl.get('BillList_msg_delete_success');
+        let messageType = constants.notifiction.type.success;
+        try {
+            const result = await api.billRequest.edit({ ...detailInfo });
+            props.spinLoading(false);
+            if (!result.isOk) {
+                message = intl.get('BillList_msg_delete_failed') + result.message;
+                messageType = constants.notifiction.type.warning;
+            }
+        } catch (error) {
+            messageType = constants.notifiction.type.error;
+            message = intl.get('BillList_msg_delete_failed') + error.message;
+            console.error('error:', error);
+        } finally {
+            openNotification({ type: messageType, message });
+        }
+    }
+
+    /**
+     * 账单删除
+     * @param {*} id 
+     */
+    const deleteBillRequest = async (id) => {
+        props.spinLoading(true);
+        let message = intl.get('BillList_msg_delete_success');
+        let messageType = constants.notifiction.type.success;
+        try {
+            const result = await api.billRequest.delete({ id });
+            props.spinLoading(false);
+            if (!result.isOk) {
+                message = intl.get('BillList_msg_delete_failed') + result.message;
+                messageType = constants.notifiction.type.warning;
+            }
+        } catch (error) {
+            messageType = constants.notifiction.type.error;
+            message = intl.get('BillList_msg_delete_failed') + error.message;
+            console.error('error:', error);
+        } finally {
+            openNotification({ type: messageType, message });
+        }
+    }
+
+    /**
+     * 更新账单信息
+     */
+    const updateBillList = data => {
+        if (data) {
+            data.map(item => {
+                item.key = item.id; // 每条记录添加key值
+                if (item.date?.length) { // 支取日期，去掉时间
+                    item.date = new Date(item.date).toLocaleDateString();
+                }
+                if (item.billType) { // 解析账单类型
+                    item.billType = getBillTypeMap().get(item.billType);
+                }
+
+                if (item.payType) { // 解析付款类型
+                    const payTypeList = item.payType.split(',');
+                    item.payType = '';
+                    payTypeList.map(payType => (item.payType += getPayTypeMap().get(parseInt(payType)) + ';'))
+                    item.payType = item.payType.slice(0, item.payType.length - 1);
+                }
+                item.total = item.actual + item.discount;
+                return item;
+            });
+        }
+        setBillList(data);
+    }
+
     return (
         <>
             <div>
                 <Button onClick={handleCreateBillDetail}>{intl.get('BillList_lbl_create')}</Button>
             </div>
             <div>
-                <Table dataSource={billList} columns={getColumns()} />
-                <Modal title={intl.get('BillList_lbl_title')} width={'100%'} visible={modalVisible}
+                <Table dataSource={billList} columns={getColumns({ editBill, deleteBill })} />
+                <Modal title={intl.get('BillList_lbl_title', { param: currOperate.lbl })} width={'100%'} visible={modalVisible}
                     onOk={handleOk} onCancel={handleCancel}>
                     <DetailInfoContext.Provider value={detailInfo}>
                         <BillDetail />

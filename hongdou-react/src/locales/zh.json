@@ -68,6 +68,7 @@
     "BillList_lbl_create":"新建",
     "BillList_lbl_edit":"编辑",
     "BillList_lbl_delete":"删除",
+    "BillList_lbl_action":"操作",
     "BillList_msg_create_success":"新建账单信息成功。",
     "BillList_msg_create_failed":"新建账单信息失败。",
     "BillList_msg_update_success":"更新账单信息成功。",

@@ -68,6 +68,7 @@
     "BillList_lbl_create":"Create",
     "BillList_lbl_edit":"Edit",
     "BillList_lbl_delete":"Delete",
+    "BillList_lbl_action":"Action",
     "billList_msg_create_success":"Create Bil info success.",
     "billList_msg_create_failed":"Create Bil info failed.",
     "billList_msg_update_success":"Update bill info success.",

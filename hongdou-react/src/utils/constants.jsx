@@ -25,5 +25,6 @@ const constants = {
     },
     component_car: 'Car', // 汽车列表
     component_bill: 'Bill', // 账单列表
+    dateFormat: 'YYYY/MM/DD' // 日期格式化
 }
 export default constants;

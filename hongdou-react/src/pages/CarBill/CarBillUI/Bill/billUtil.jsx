@@ -1,12 +1,14 @@
 import React from 'react';
+import { Space } from 'antd';
 import intl from 'react-intl-universal';
+import api from '../../../../api';
 
 /**
  * 输出账单列表的表格列名
  * @param {*} props 
  */
 export const getColumns = (props) => {
-    return [{
+    const columns = [{
         title: intl.get('CarDetail_lbl_name'), // 汽车名
         dataIndex: 'carName',
         key: 'carName',
@@ -40,32 +42,49 @@ export const getColumns = (props) => {
         dataIndex: 'unitPrice',
         key: 'unitPrice',
     }];
+
+    const operate = {
+        title: intl.get('BillList_lbl_action'), // 操作
+        dataIndex: 'action',
+        key: 'action',
+        render: (text, record, index) => (
+            <Space size='middle'>
+                <a onClick={props.editBill.bind(this, record.id)}>{intl.get('BillList_lbl_edit')}</a>
+                <a onClick={props.deleteBill.bind(this, record.id)}>{intl.get('BillList_lbl_delete')}</a>
+            </Space>
+        )
+    };
+
+    if (!props.hideOperate) {
+        columns.push(operate);
+    }
+    return columns;
 }
 
 /**
  * 汽车账单类型
  */
-export const getBillTypeMap = ()=>{
+export const getBillTypeMap = () => {
     return new Map()
-    .set(0, '裸车')
-    .set(1, '保险')
-    .set(2, '购置税')
-    .set(3, '上牌')
-    .set(4, '加油')
-    .set(5, '停车')
-    .set(6, '轮渡船票')
-    .set(7, '维修')
-    .set(8, '配件购买')
-    .set(999, '其他');
+        .set(1, '裸车')
+        .set(2, '保险')
+        .set(3, '购置税')
+        .set(4, '上牌')
+        .set(5, '加油')
+        .set(6, '停车')
+        .set(7, '轮渡船票')
+        .set(8, '维修')
+        .set(9, '配件购买')
+        .set(999, '其他');
 }
 
-export const getPayTypeMap = ()=>{
+export const getPayTypeMap = () => {
     return new Map()
-    .set(0,'微信')
-    .set(1,'支付宝')
-    .set(2,'银联云闪付')
-    .set(3,'刷卡')
-    .set(4,'丰云行APP')
-    .set(5,'停车券')
-    .set(999,'其他');
+        .set(1, '微信')
+        .set(2, '支付宝')
+        .set(3, '银联云闪付')
+        .set(4, '刷卡')
+        .set(5, '丰云行APP')
+        .set(6, '停车券')
+        .set(999, '其他');
 }
