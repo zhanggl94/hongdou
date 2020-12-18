@@ -61,12 +61,15 @@ router.post('/search', async (req: Request, res: Response) => {
 /**
  * 账单编辑
  */
-router.post('/edit', async(req:Request,res:Response)=>{
+router.post('/edit', async (req: Request, res: Response) => {
     const result = new ResponResult();
-    const sql = `UPDATE FROM bill (carId, date, billType, payType, actual, discount, unitPrice, place, note, userId)
-    VALUES (?,?,?,?,?,?,?,?,?,?) WHERE id = ?`;
+    // const sql = `UPDATE FROM bill (carId, date, billType, payType, actual, discount, unitPrice, place, note, userId)
+    // VALUES (?,?,?,?,?,?,?,?,?,?) WHERE id = ?`;
+    const sql = `UPDATE bill SET carId = ?, date = ?, billType = ?, payType = ?, actual = ?, 
+    discount = ?, unitPrice = ?, place = ?, note = ?, userId = ?
+    WHERE id = ?`;
     const bill: Bill = req.body as Bill;
-    const paramList: Array<any> = [bill.carInfo.id, bill.date, bill.billType, bill.payType.toString(), bill.actual, bill.discount, bill.unitPrice, bill.place, bill.note, bill.userId, bill.carInfo.id];
+    const paramList: Array<any> = [bill.carInfo.id, bill.date, bill.billType, bill.payType.toString(), bill.actual, bill.discount, bill.unitPrice, bill.place, bill.note, bill.userId, bill.id];
     let resCode = 200;
     try {
         const mysql = new MySqlOperate();
