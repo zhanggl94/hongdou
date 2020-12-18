@@ -17,15 +17,10 @@ const { Option } = Select;
 
 const BillDetail = props => {
     let parentDetailInfo = useContext(CommonContext);
-    console.log('parent', parentDetailInfo)
     const searchRef = useRef();
     const currUserId = props.auth.currentUser.userid;
     const [searchCarInfo, setSearchCarInfo] = useState(null);
     const [billDetail, setBillDetail] = useState(parentDetailInfo);
-
-    useEffect(() => {
-        parentDetailInfo = Object.assign(parentDetailInfo, billDetail);
-    }, [billDetail]);
 
     /**
      * 获取汽车信息(API请求)
@@ -92,18 +87,24 @@ const BillDetail = props => {
         switch (type) {
             case 'carInfo':
                 changeElement = { 'carInfo': data };
+                parentDetailInfo.carInfo = data;
                 break;
             case 'DatePicker':
                 changeElement = { 'date': data.dateStr };
+                parentDetailInfo.date = data.dateStr;
                 break;
             case 'Select':
                 changeElement = { [name]: data };
+                parentDetailInfo[name] = data;
                 break;
             case 'InputNumber':
                 changeElement = { [name]: data, 'total': billDetail.actual + billDetail.discount };
+                parentDetailInfo[name] = data;
+                parentDetailInfo.total = parentDetailInfo.actual + parentDetailInfo.discount;
                 break;
             case 'Input':
                 changeElement = { [data.target.name]: data.target.value };
+                parentDetailInfo[data.target.name] = data.target.value;
                 break;
         }
         setBillDetail({ ...billDetail, ...changeElement });
@@ -125,7 +126,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_date')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <DatePicker name='date' defaultValue={moment(parentDetailInfo.date, constants.dateFormat)} onChange={handleDateChange.bind(this)} />
+                        <DatePicker name='date' value={moment(parentDetailInfo.date, constants.dateFormat)} onChange={handleDateChange.bind(this)} />
                     </div>
                 </div>
                 <div className='row'>
@@ -134,7 +135,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_bill_type')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <Select name='billType' style={{ width: '100%' }} defaultValue={parentDetailInfo.billType} onChange={handleFormChange.bind(this, 'Select', 'billType')}>
+                        <Select name='billType' style={{ width: '100%' }} value={parentDetailInfo.billType} onChange={handleFormChange.bind(this, 'Select', 'billType')}>
                             {Array.from(getBillTypeMap()).map(item => (
                                 <Option key={item[0]} value={item[0]}>{item[1]}</Option>
                             ))}
@@ -146,7 +147,7 @@ const BillDetail = props => {
                     </div>
                     <div className='textLeft width_25_per'>
                         <Select name='payType' style={{ width: '100%' }}
-                            defaultValue={parentDetailInfo.payType.map(item => {item = getPayTypeMap().get(item);return item;})}
+                            value={Array.isArray(parentDetailInfo.payType) && parentDetailInfo.payType.map(item => (item = parseInt(item)))}
                             onChange={handleFormChange.bind(this, 'Select', 'payType')} mode="multiple">
                             {Array.from(getPayTypeMap()).map(item => (
                                 <Option key={item[0]} value={item[0]}>{item[1]}</Option>
@@ -160,14 +161,14 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_actual')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber name='actual' defaultValue={parentDetailInfo.actual} onChange={handleFormChange.bind(this, 'InputNumber', 'actual')} />
+                        <InputNumber name='actual' value={parentDetailInfo.actual} onChange={handleFormChange.bind(this, 'InputNumber', 'actual')} />
                     </div>
                     {/* 优惠金额 */}
                     <div className='textRight width_25_per'>
                         <span>{intl.get('BillDetail_lbl_discount')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber name='discount' defaultValue={parentDetailInfo.discount} onChange={handleFormChange.bind(this, 'InputNumber', 'discount')} />
+                        <InputNumber name='discount' value={parentDetailInfo.discount} onChange={handleFormChange.bind(this, 'InputNumber', 'discount')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -183,7 +184,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_unit_price')}：</span>
                     </div>
                     <div className='textLeft width_25_per'>
-                        <InputNumber name='unitPrice' defaultValue={parentDetailInfo.unitPrice} onChange={handleFormChange.bind(this, 'InputNumber', 'unitPrice')} />
+                        <InputNumber name='unitPrice' value={parentDetailInfo.unitPrice} onChange={handleFormChange.bind(this, 'InputNumber', 'unitPrice')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -192,7 +193,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_place')}：</span>
                     </div>
                     <div className='textLeft width_75_per'>
-                        <Input name='place' defaultValue={parentDetailInfo.place} onChange={handleFormChange.bind(this, 'Input', 'place')} />
+                        <Input name='place' value={parentDetailInfo.place} onChange={handleFormChange.bind(this, 'Input', 'place')} />
                     </div>
                 </div>
                 <div className='row'>
@@ -201,7 +202,7 @@ const BillDetail = props => {
                         <span>{intl.get('BillDetail_lbl_note')}：</span>
                     </div>
                     <div className='textLeft width_75_per'>
-                        <Input.TextArea name='note' rows={5} defaultValue={parentDetailInfo.note} onChange={handleFormChange.bind(this, 'Input', 'note')} />
+                        <Input.TextArea name='note' rows={5} value={parentDetailInfo.note} onChange={handleFormChange.bind(this, 'Input', 'note')} />
                     </div>
                 </div>
             </div >

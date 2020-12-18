@@ -72,7 +72,7 @@ const CarList = (props) => {
         setDetailInfo({
             id: '',
             name: '',
-            brand: 0,
+            brand: '',
             isDefault: 0,
             note: '',
             userId: props.currentUser.userid

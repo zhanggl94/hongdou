@@ -43,7 +43,7 @@ const CarDetail = props => {
                 <Col span={8} className='text-right'>{intl.get('CarDetail_lbl_brand')}:</Col>
                 <Col span={2}></Col>
                 <Col span={10}>
-                    <Select style={{ width: '100%' }} onChange={handleFormChanged.bind(this, 'Select')} defaultValue={detailCarInfo.brand}>
+                    <Select style={{ width: '100%' }} onChange={handleFormChanged.bind(this, 'Select')} value={detailCarInfo.brand}>
                         {Array.from(carUtil.getBrandMap()).map(item => (
                             <Option key={item[0]} value={item[0]}>{item[1]}</Option>
                         ))}

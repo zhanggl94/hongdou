@@ -21,18 +21,6 @@ const BillList = props => {
     const [billList, setBillList] = useState(null); // 表格数据源
     const [currOperate, setCurrOperate] = useState({ type: '', lbl: '' }); // 进行的操作
 
-    // const dataSource = [{
-    //     key: '1',
-    //     carName: '丰田',
-    //     date: '2020/10/1',
-    //     billType: '加油',
-    //     actual: 300,
-    //     discount: 0,
-    //     total: 300,
-    //     payType: '微信支付',
-    //     unitPrice: 5.9
-    // }];
-
     /**
      * 页面初始化表格
      */
@@ -53,10 +41,14 @@ const BillList = props => {
     /**
      * OK事件
      */
-    const handleOk = () => {
-        createBillRequest();
-        searchBillRequest(new QueryParam([{ key: 'userId', value: currUserId }]));
+    const handleOk = async () => {
+        if (currOperate.type === constants.operation.create) {
+            await createBillRequest();
+        } else if (currOperate.type === constants.operation.edit) {
+            await updateBillRequest();
+        }
         closeModal();
+        searchBillRequest(new QueryParam([{ key: 'userId', value: currUserId }]));
     }
 
     /**
@@ -81,7 +73,10 @@ const BillList = props => {
      * 清除账单详细信息
      */
     const clearDetailInfo = () => {
-        setDetailInfo(new BillDetailModle());
+        const clearBillDetail = new BillDetailModle();
+        clearBillDetail.userId = currUserId;
+        clearBillDetail.date = new Date().toLocaleDateString();
+        setDetailInfo(clearBillDetail);
     }
 
     /**
@@ -148,7 +143,10 @@ const BillList = props => {
         props.spinLoading(false);
     }
 
-
+    /**
+     * 获取账单编辑页面的信息
+     * @param {*} paramList 
+     */
     const editBillRequest = async (paramList) => {
         props.spinLoading(true);
         try {
@@ -178,20 +176,20 @@ const BillList = props => {
     /**
      * 账单更新
      */
-    const updateBillRequest = async (record) => {
+    const updateBillRequest = async () => {
         props.spinLoading(true);
-        let message = intl.get('BillList_msg_delete_success');
+        let message = intl.get('BillList_msg_update_success');
         let messageType = constants.notifiction.type.success;
         try {
             const result = await api.billRequest.edit({ ...detailInfo });
             props.spinLoading(false);
             if (!result.isOk) {
-                message = intl.get('BillList_msg_delete_failed') + result.message;
+                message = intl.get('BillList_msg_update_failed') + result.message;
                 messageType = constants.notifiction.type.warning;
             }
         } catch (error) {
             messageType = constants.notifiction.type.error;
-            message = intl.get('BillList_msg_delete_failed') + error.message;
+            message = intl.get('BillList_msg_update_failed') + error.message;
             console.error('error:', error);
         } finally {
             openNotification({ type: messageType, message });
