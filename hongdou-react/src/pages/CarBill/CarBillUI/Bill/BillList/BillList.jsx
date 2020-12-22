@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
-import { Table, Button, Modal } from 'antd';
+import { Table, Button, Modal, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import BillDetail from '../BillDetail/BillDetail';
 import { getBillTypeMap, getColumns, getPayTypeMap } from '../billUtil';
 import CommonContext from '../../../../../components/CommonContext';
@@ -10,6 +11,7 @@ import { openNotification } from '../../../../../utils/util';
 import constants from '../../../../../utils/constants';
 import CommonProps from '../../../../../components/HOC/CommonProps';
 import QueryParam from '../../../../../modle/QueryParam';
+import './style.less';
 
 const BillList = props => {
     const DetailInfoContext = CommonContext;
@@ -249,8 +251,20 @@ const BillList = props => {
 
     return (
         <>
-            <div>
-                <Button onClick={handleCreateBillDetail}>{intl.get('BillList_lbl_create')}</Button>
+            <div className='btn_container'>
+                <div className='btn'>
+                    <Button onClick={handleCreateBillDetail}>{intl.get('BillList_lbl_create')}</Button>
+                </div>
+                <div className='btn'>
+                    <Upload>
+                        <Button>
+                            <UploadOutlined /> {intl.get('BillList_lbl_import')}
+                        </Button>
+                    </Upload>
+                </div>
+                <div className='btn'>
+                    <Button onClick={handleCreateBillDetail}>{intl.get('BillList_lbl_export')}</Button>
+                </div>
             </div>
             <div>
                 <Table dataSource={billList} columns={getColumns({ editBill, deleteBill })} />

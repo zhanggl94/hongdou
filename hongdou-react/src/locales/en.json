@@ -69,6 +69,8 @@
     "BillList_lbl_edit":"Edit",
     "BillList_lbl_delete":"Delete",
     "BillList_lbl_action":"Action",
+    "BillList_lbl_import":"Import Excle",
+    "BillList_lbl_export":"Export Excle",
     "billList_msg_create_success":"Create Bil info success.",
     "billList_msg_create_failed":"Create Bil info failed.",
     "billList_msg_update_success":"Update bill info success.",
