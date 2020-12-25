@@ -7,11 +7,12 @@ import { getBillTypeMap, getColumns, getPayTypeMap } from '../billUtil';
 import CommonContext from '../../../../../components/CommonContext';
 import BillDetailModle from '../../../../../modle/BillDetailModle';
 import api from '../../../../../api';
-import { openNotification } from '../../../../../utils/util';
+import { openNotification, importExcle } from '../../../../../utils/util';
 import constants from '../../../../../utils/constants';
 import CommonProps from '../../../../../components/HOC/CommonProps';
 import QueryParam from '../../../../../modle/QueryParam';
 import './style.less';
+import XLSX from 'xlsx';
 
 const BillList = props => {
     const DetailInfoContext = CommonContext;
@@ -249,6 +250,17 @@ const BillList = props => {
         setBillList(data);
     }
 
+
+    const uploadExcel = ({ file, fileList }) => {
+        importExcle(file, showExlceContent)
+    }
+
+    const showExlceContent = (data) => {
+        console.log('callback', data);
+    }
+
+
+
     return (
         <>
             <div className='btn_container'>
@@ -256,7 +268,7 @@ const BillList = props => {
                     <Button onClick={handleCreateBillDetail}>{intl.get('BillList_lbl_create')}</Button>
                 </div>
                 <div className='btn'>
-                    <Upload>
+                    <Upload onChange={uploadExcel} showUploadList={false}>
                         <Button>
                             <UploadOutlined /> {intl.get('BillList_lbl_import')}
                         </Button>
