@@ -9,6 +9,7 @@ const base = {
     createBill: '/api/bill/create',
     editBill: '/api/bill/edit',
     deleteBill: '/api/bill/delete',
-    searchBill: '/api/bill/search'
+    searchBill: '/api/bill/search',
+    importBill:'/api/bill/import'
 }
 export default base;

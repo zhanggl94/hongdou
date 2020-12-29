@@ -67,17 +67,21 @@ export const getColumns = (props) => {
 export const getBillTypeMap = () => {
     return new Map()
         .set(1, '裸车')
-        .set(2, '保险')
+        .set(2, '车险')
         .set(3, '购置税')
         .set(4, '上牌')
         .set(5, '加油')
-        .set(6, '停车')
-        .set(7, '轮渡船票')
-        .set(8, '维修')
-        .set(9, '配件购买')
+        .set(6, '停车费')
+        .set(7, '洗车')
+        .set(8, '轮渡车票')
+        .set(9, '维修')
+        .set(10, '保养')
         .set(999, '其他');
 }
 
+/**
+ * 汽车支付类型
+ */
 export const getPayTypeMap = () => {
     return new Map()
         .set(1, '微信')
@@ -86,5 +90,63 @@ export const getPayTypeMap = () => {
         .set(4, '刷卡')
         .set(5, '丰云行APP')
         .set(6, '停车券')
+        .set(7,'滴滴加油')
         .set(999, '其他');
+}
+
+/**
+ * 账单导出的Excel表头
+ */
+export const getExlceHeaders = () => {
+    return [{
+        title: '汽车名',
+        dataIndex: 'carName',
+        key: 'carName',
+        className: 'text-monospace'
+    }, {
+        title: '账单日期',
+        dataIndex: 'date',
+        key: 'date',
+        className: 'text-monospace'
+    }, {
+        title: '账单类别',
+        dataIndex: 'billType',
+        key: 'billType',
+        className: 'text-monospace'
+    }, {
+        title: '付款方式',
+        dataIndex: 'payType',
+        key: 'payType',
+        className: 'text-monospace'
+    }, {
+        title: '实际花费',
+        dataIndex: 'actual',
+        key: 'actual',
+        className: 'text-monospace'
+    }, {
+        title: '优惠',
+        dataIndex: 'discount',
+        key: 'discount',
+        className: 'text-monospace'
+    }, {
+        title: '总金额',
+        dataIndex: 'total',
+        key: 'total',
+        className: 'text-monospace'
+    }, {
+        title: '单价',
+        dataIndex: 'unitPrice',
+        key: 'unitPrice',
+        className: 'text-monospace'
+    }, {
+        title: '地点',
+        dataIndex: 'place',
+        key: 'place',
+        className: 'text-monospace'
+    }, {
+        title: '备注',
+        dataIndex: 'note',
+        key: 'note',
+        className: 'text-monospace'
+    }];
 }

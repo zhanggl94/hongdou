@@ -3,16 +3,16 @@ import intl from 'react-intl-universal';
 import { Table, Button, Modal, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import BillDetail from '../BillDetail/BillDetail';
-import { getBillTypeMap, getColumns, getPayTypeMap } from '../billUtil';
+import { getBillTypeMap, getColumns, getPayTypeMap, getExlceHeaders } from '../billUtil';
 import CommonContext from '../../../../../components/CommonContext';
 import BillDetailModle from '../../../../../modle/BillDetailModle';
 import api from '../../../../../api';
-import { openNotification, importExcle } from '../../../../../utils/util';
+import { openNotification, formatExcelDate, findMapKey } from '../../../../../utils/util';
+import { importExcle, exportExcel } from '../../../../../utils/excelOperate';
 import constants from '../../../../../utils/constants';
 import CommonProps from '../../../../../components/HOC/CommonProps';
 import QueryParam from '../../../../../modle/QueryParam';
 import './style.less';
-import XLSX from 'xlsx';
 
 const BillList = props => {
     const DetailInfoContext = CommonContext;
@@ -29,7 +29,6 @@ const BillList = props => {
      */
     useEffect(() => {
         searchBillRequest(new QueryParam([{ key: 'userId', value: currUserId }]));
-        console.log('init table.')
     }, []);
 
     const handleCreateBillDetail = () => {
@@ -250,16 +249,50 @@ const BillList = props => {
         setBillList(data);
     }
 
-
+    /**
+     * Exlce文件上传
+     * @param {*} param0 
+     */
     const uploadExcel = ({ file, fileList }) => {
-        importExcle(file, showExlceContent)
+        importExcle(file, getExlceData)
     }
 
-    const showExlceContent = (data) => {
-        console.log('callback', data);
+    /**
+     * 获取Excle文件的内容
+     * @param {*} data 
+     */
+    const getExlceData = async (data) => {
+        if (data?.error) {
+            openNotification({ type: constants.notifiction.type.error, message: '获取Excel内容失败' });
+            console.error('Error', data.error);
+        } else {
+            data.data.map(item => {
+                item.date = formatExcelDate(item.date);
+                item.billType = findMapKey(getBillTypeMap(), item.billType);
+                if (item.payType?.length) {
+                    const payType = item.payType;
+                    item.payType = '';
+                    payType.split(',').map(
+                        value => {
+                            item.payType += findMapKey(getPayTypeMap(), value) + ',';
+                        }
+                    );
+                    if (item.payType.endsWith(',')) {
+                        item.payType = item.payType.slice(0, item.payType.length - 1);
+                    }
+                }
+                return item;
+            });
+            await api.billRequest.import(data);
+        }
     }
 
-
+    /**
+     * 账单信息Excle下载
+     */
+    const downloadExcle = () => {
+        exportExcel(getExlceHeaders(), billList, 'CarBill.xlsx');
+    }
 
     return (
         <>
@@ -268,14 +301,15 @@ const BillList = props => {
                     <Button onClick={handleCreateBillDetail}>{intl.get('BillList_lbl_create')}</Button>
                 </div>
                 <div className='btn'>
-                    <Upload onChange={uploadExcel} showUploadList={false}>
+                    {/* <input type="file" mutiple="multiple" /> */}
+                    <Upload customRequest={uploadExcel} showUploadList={false}>
                         <Button>
                             <UploadOutlined /> {intl.get('BillList_lbl_import')}
                         </Button>
                     </Upload>
                 </div>
                 <div className='btn'>
-                    <Button onClick={handleCreateBillDetail}>{intl.get('BillList_lbl_export')}</Button>
+                    <Button onClick={downloadExcle}>{intl.get('BillList_lbl_export')}</Button>
                 </div>
             </div>
             <div>
