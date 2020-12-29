@@ -115,6 +115,11 @@ router.post('/delete', async (req: Request, res: Response) => {
     }
 });
 
-
+/**
+ * 导入数据
+ */
+router.post('/import', async(req:Request, res:Response)=>{
+    res.send(req.body);
+});
 
 export default router;
