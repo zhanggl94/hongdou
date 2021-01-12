@@ -281,9 +281,10 @@ const BillList = props => {
                         item.payType = item.payType.slice(0, item.payType.length - 1);
                     }
                 }
+                item['userId']=currUserId;
                 return item;
             });
-            await api.billRequest.import(data);
+            await api.billRequest.import(data.data);
         }
     }
 
@@ -291,7 +292,7 @@ const BillList = props => {
      * 账单信息Excle下载
      */
     const downloadExcle = () => {
-        exportExcel(getExlceHeaders(), billList, 'CarBill.xlsx');
+        exportExcel(getExlceHeaders(), billList, '汽车账单.xlsx');
     }
 
     return (
