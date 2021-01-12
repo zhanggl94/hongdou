@@ -72,7 +72,7 @@ export const exportExcel = (headers, data, fileName = defautlFileName) => {
                 output,
                 {
                     '!ref': ref,
-                    '!cols': [{ wpx: 45 }, { wpx: 100 }, { wpx: 200 }, { wpx: 80 }, { wpx: 150 }, { wpx: 100 }, { wpx: 300 }, { wpx: 300 }],
+                    '!cols': [{ wpx: 150 }, { wpx: 100 }, { wpx: 100 }, { wpx: 100 }, { wpx: 100 }, { wpx: 100 }, { wpx: 100 }, { wpx: 100 }, { wpx: 200 }, { wpx: 300 }],
                 },
             ),
         },
