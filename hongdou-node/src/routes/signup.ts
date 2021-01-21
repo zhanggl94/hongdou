@@ -3,30 +3,25 @@ import { cryPassword } from '../utils/cryptoUtil';
 import { formatDateHour24 } from '../utils/util';
 import { createToken } from '../utils/jwtUtil';
 import constants from '../utils/constants';
-import MySqlOperate from '../mysql/mysqlOperate';
+import mySqlOperate from '../mysql/mysqlOperate';
 import ResponResult from '../module/ResponResult';
 const router = express.Router();
 
 router.post('/signup', async (req: Request, res: Response) => {
     let result: ResponResult = new ResponResult();
     try {
-        const mysql = new MySqlOperate();
-        await mysql.connectmysql();
-        result = await isUserExist(req, mysql); // 判断用户是否重复
+        result = await isUserExist(req); // 判断用户是否重复
         if (!result.isOk) {
-            mysql.endmysql();
             res.status(400).send(result);
         } else {
             if (result.isOk) {
-                result = await createUser(req, mysql) // 创建用户
+                result = await createUser(req) // 创建用户
                 let httpCode = 400;
                 if (result.isOk) {
                     httpCode = 200;
                     result.jwtToken = createToken({ username: req.body.username, userId: result.data.userId });
                 }
                 res.status(httpCode).send(result);
-            } else {
-                mysql.endmysql();
             }
         }
     } catch (error) {
@@ -40,12 +35,12 @@ router.post('/signup', async (req: Request, res: Response) => {
  * @param res 
  * @param mysql 
  */
-const isUserExist = async (req: Request, mysql: MySqlOperate) => {
+const isUserExist = async (req: Request) => {
     const result = new ResponResult();
     const sql = `select id from user where username = ?`;
     const paramList: Array<string> = [req.body.username];
     try {
-        const data: any = await mysql.querySql(sql, paramList)
+        const data: any = await mySqlOperate.query(sql, paramList)
         if (data.length) {
             result.isOk = false;
             result.message = 'The user has regisited.';
@@ -66,7 +61,7 @@ const isUserExist = async (req: Request, mysql: MySqlOperate) => {
  * @param res 响应
  * @param mysql 数据库操作对象
  */
-const createUser = async (req: Request, mysql: MySqlOperate) => {
+const createUser = async (req: Request,) => {
     const result = new ResponResult();
     const currentDateTime = formatDateHour24(new Date(), constants.time_zone_zh_cn);
     console.log('curr', currentDateTime);
@@ -74,7 +69,7 @@ const createUser = async (req: Request, mysql: MySqlOperate) => {
     const cryPwd = cryPassword(req.body.password, currentDateTime);
     const paramList = [req.body.username, cryPwd, currentDateTime, currentDateTime];
     try {
-        const data: any = await mysql.querySql(sql, paramList)
+        const data: any = await mySqlOperate.query(sql, paramList)
         console.log('data', data)
         if (!data.affectedRows) {
             result.isOk = false;

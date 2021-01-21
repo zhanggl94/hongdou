@@ -1,8 +1,7 @@
 import express, { Request, Response } from 'express';
-import mysql from '../config/mysql';
 import Bill from '../module/Bill';
 import ResponResult from '../module/ResponResult';
-import MySqlOperate from '../mysql/mysqlOperate';
+import mySqlOperate from '../mysql/mysqlOperate';
 import { getQueryObject, getSplicedSQL } from '../utils/util';
 
 const router = express.Router();
@@ -19,9 +18,7 @@ router.post('/create', async (req: Request, res: Response) => {
     const paramList: Array<any> = [bill.carInfo.id, bill.date, bill.billType, bill.payType.toString(), bill.actual, bill.discount, bill.unitPrice, bill.place, bill.note, bill.userId];
     let resCode = 200;
     try {
-        const mysql = new MySqlOperate();
-        await mysql.connectmysql();
-        const data: any = await mysql.querySql(sql, paramList);
+        const data: any = await mySqlOperate.query(sql, paramList);
         if (!data.affectedRows) {
             resCode = 400;
             result.isOk = false;
@@ -44,9 +41,7 @@ router.post('/search', async (req: Request, res: Response) => {
     const queryObject = getQueryObject(req.body);
     let sql = `SELECT b.*, c.name AS carName FROM bill b INNER JOIN car c ON c.id = b.carId ${getSplicedSQL(queryObject, ['b'])} `;
     try {
-        const mysql = new MySqlOperate();
-        await mysql.connectmysql();
-        const data: any = await mysql.querySql(sql, queryObject.valueList);
+        const data: any = await mySqlOperate.query(sql, queryObject.valueList);
         let resCode = 200;
         if (data.length) {
             result.data = data;
@@ -74,8 +69,7 @@ router.post('/edit', async (req: Request, res: Response) => {
     const paramList: Array<any> = [bill.carInfo.id, bill.date, bill.billType, bill.payType.toString(), bill.actual, bill.discount, bill.unitPrice, bill.place, bill.note, bill.userId, bill.id];
     let resCode = 200;
     try {
-        const mysql = new MySqlOperate();
-        const data: any = await mysql.querySql(sql, paramList);
+        const data: any = await mySqlOperate.query(sql, paramList);
         if (!data.affectedRows) {
             resCode = 400;
             result.isOk = false;
@@ -100,8 +94,7 @@ router.post('/delete', async (req: Request, res: Response) => {
     const paramList = [req.body.id];
     let resCode = 200;
     try {
-        const mysql = new MySqlOperate();
-        const data: any = await mysql.querySql(sql, paramList);
+        const data: any = await mySqlOperate.query(sql, paramList);
         if (!data.affectedRows) {
             resCode = 400;
             result.isOk = false;
@@ -123,7 +116,6 @@ router.post('/delete', async (req: Request, res: Response) => {
 router.post('/import', async (req: Request, res: Response) => {
     const result = new ResponResult();
     if (req.body) {
-        const mysql = new MySqlOperate();
         const carList = getCarList(req.body);
         // 判断汽车信息是否存在，存在查询汽车信息的id，不存在新建汽车信息，并获取id
         if (carList.length) {
@@ -131,13 +123,13 @@ router.post('/import', async (req: Request, res: Response) => {
                 const carName = car.name;
                 const currUserId = car.userId;
                 try {
-                    await mysql.connectmysql();
-                    const carData: any = await checkCarName(mysql, [carName, currUserId]);
+                    // await mysql.connectmysql();
+                    const carData: any = await checkCarName([carName, currUserId]);
                     if (carData?.[0]?.id) {
                         car['id'] = carData[0].id;
                     } else {
                         // name,brand,isDefault,note, userId
-                        const newCarData = await insertCar(mysql, [carName, 9999, 0, 'Excle import', currUserId]);
+                        const newCarData = await insertCar([carName, 9999, 0, 'Excle import', currUserId]);
                         console.log('newCarData', newCarData);
                         car['id'] = newCarData.insertId;
                     }
@@ -165,27 +157,25 @@ router.post('/import', async (req: Request, res: Response) => {
             if (excelInsertSQL.endsWith(',')) {
                 excelInsertSQL = excelInsertSQL.slice(0, excelInsertSQL.length - 1);
             }
-            console.log('excelIn',excelInsertSQL);
-            console.log('paramList',paramList);
-            // try {
-            //     const data: any = await mysql.querySql(excelInsertSQL, paramList);
-            //     if (!data.affectedRows) {
-            //         result.isOk = false;
-            //         result.message = 'Insert bill info failed.';
-            //     }
-            // } catch (error) {
-            //     result.isOk = false;
-            //     result.message = 'There has some system errors.';
-            //     result.error = error;
-            //     mysql.endmysql();
-            // }
+            console.log('excelIn', excelInsertSQL);
+            console.log('paramList', paramList);
+            try {
+                const data: any = await mySqlOperate.query(excelInsertSQL, paramList);
+                if (!data.affectedRows) {
+                    result.isOk = false;
+                    result.message = 'Insert bill info failed.';
+                }
+            } catch (error) {
+                result.isOk = false;
+                result.message = 'There has some system errors.';
+                result.error = error;
+            }
         }
-        mysql.endmysql();
     } else {
         result.isOk = false;
         result.message = 'The body is null.';
     }
-    const resCode:number = result.isOk ? 200 : 400;
+    const resCode: number = result.isOk ? 200 : 400;
     res.status(resCode).send(result);
 });
 
@@ -207,11 +197,11 @@ const getCarList = (body: Array<object>): Array<any> => {
  * @param mysql 
  * @param paramList 
  */
-const checkCarName = async (mysql: MySqlOperate, paramList: Array<string>): Promise<any> => {
+const checkCarName = async (paramList: Array<string>): Promise<any> => {
     const sql = `SELECT id FROM car WHERE name = ? AND userId = ?`;
     return new Promise(async (resolve: any, reject: any) => {
         try {
-            resolve(await mysql.querySql(sql, paramList));
+            resolve(await mySqlOperate.query(sql, paramList));
         } catch (error) {
             reject(error);
         }
@@ -223,11 +213,11 @@ const checkCarName = async (mysql: MySqlOperate, paramList: Array<string>): Prom
  * @param mysql 
  * @param paramList 
  */
-const insertCar = async (mysql: MySqlOperate, paramList: Array<string>): Promise<any> => {
+const insertCar = async (paramList: Array<string>): Promise<any> => {
     const sql = `INSERT INTO car (name,brand,isDefault,note, userId) VALUES (?,?,?,?,?)`;
     return new Promise(async (resolve: any, reject: any) => {
         try {
-            resolve(await mysql.querySql(sql, paramList));
+            resolve(await mySqlOperate.query(sql, paramList));
         } catch (error) {
             reject(error);
         }

@@ -1,63 +1,27 @@
-import mysql, { Connection, MysqlError, queryCallback } from 'mysql';
+import mysql from 'mysql';
 import mysqlConfig from '../config/mysql';
 
-class MySqlOperate {
-    private connection: Connection;
+const mySqlOperate: any = {};
+const pool = mysql.createPool(mysqlConfig);
 
-    constructor() {
-        this.connection = mysql.createConnection({
-            host: mysqlConfig.host,
-            port: mysqlConfig.port,
-            user: mysqlConfig.username,
-            password: mysqlConfig.password,
-            database: mysqlConfig.database
-        });
-    }
-
-    public connectmysql = () => {
-        return new Promise((resolve, reject) => {
-            this.connection.connect((error: MysqlError) => {
-                if (error) {
-                    console.log(`Connect mysql failed. error${error}`);
-                    reject(error);
-                } else {
-                    console.log('Connect mysql success.')
-                    resolve(true);
-                }
-
-            })
-        })
-    }
-
-    public querySql = (sql: string, paramList: Array<string>) => {
-        console.log(sql, paramList)
-        return new Promise((resolve: any, reject: any) => {
-            this.connection.query(sql, paramList, (error, data) => {
-                if (error) {
-                    console.log(`Query sql failed.${error}`);
-                    reject(error);
-                } else {
-                    resolve(data);
-                }
-            })
-        })
-    }
-
-    public endmysql = () => {
-        this.connection.end((error?: MysqlError) => {
-            if (error) {
-                console.log(`End mysql failed.${error}`);
+//使用mysql的连接池功能
+mySqlOperate.query = (sql: string, paramList: Array<any>): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        pool.getConnection((err, connection) => {
+            if (err) {
+                reject(err);
             } else {
-                console.log(`End mysql success.`);
+                connection.query(sql, paramList, (err, data) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data);
+                    }
+                });
+                connection.release();
             }
-        })
-    }
-
-    public destorymysql = () => {
-        if (this.connection) {
-            this.connection.destroy();
-        }
-    }
+        });
+    })
 }
 
-export default MySqlOperate;
+export default mySqlOperate;

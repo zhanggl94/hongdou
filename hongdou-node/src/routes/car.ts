@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
-import MySqlOperate from '../mysql/mysqlOperate';
-import isEmpty from 'lodash/isEmpty';
+import mySqlOperate from '../mysql/mysqlOperate';
 import ResponseResult from '../module/ResponResult';
 import { getQueryObject, getSplicedSQL } from '../utils/util';
 
@@ -13,13 +12,11 @@ router.post('/create', async (req: Request, res: Response) => {
     const result = new ResponseResult();
     const sql = `INSERT INTO car (name,brand,isDefault,note, userId) VALUES (?,?,?,?,?)`;
     const paramList = [req.body.name, req.body.brand, req.body.isDefault, req.body.note, req.body.userId];
-    const mysql = new MySqlOperate();
     try {
-        await mysql.connectmysql();
         if (req.body.isDefault === 1) {
-            await setIsDefault(mysql, req.body.userId);
+            await setIsDefault(req.body.userId);
         }
-        const data: any = await mysql.querySql(sql, paramList);
+        const data: any = await mySqlOperate.query(sql, paramList);
         let resCode = 200;
         if (!data.affectedRows) {
             result.isOk = false;
@@ -33,7 +30,6 @@ router.post('/create', async (req: Request, res: Response) => {
         result.message = 'There is some system errors.';
         res.status(400).send(result);
     }
-    mysql.endmysql();
 });
 
 /**
@@ -44,11 +40,8 @@ router.post('/search', async (req: Request, res: Response) => {
     const queryObject = getQueryObject(req.body);
 
     let sql = `SELECT * FROM car c WHERE 1=1 ` + getSplicedSQL(queryObject,['c']);
-
-    const mysql = new MySqlOperate();
     try {
-        await mysql.connectmysql();
-        const data: any = await mysql.querySql(sql, queryObject.valueList);
+        const data: any = await mySqlOperate.query(sql, queryObject.valueList);
         if (data.length) {
             result.data = data;
         }
@@ -59,7 +52,6 @@ router.post('/search', async (req: Request, res: Response) => {
         result.error = error;
         res.status(400).send(result);
     }
-    mysql.endmysql();
 });
 
 /**
@@ -70,13 +62,11 @@ router.post('/edit', async (req: Request, res: Response) => {
     const sql = `UPDATE car SET name = ?, brand = ?, isDefault = ?, note = ? WHERE id = ? AND userId = ?`;
     const body = req.body;
     const paramList = [body.name, body.brand, body.isDefault, body.note, body.id, body.userId];
-    const mysql = new MySqlOperate();
     try {
-        await mysql.connectmysql();
         if (body.isDefault === 1) { // 当设置为默认值时，清除其他汽车的默认选项(默认汽车只有一辆)
-            await setIsDefault(mysql, body.userId);
+            await setIsDefault(body.userId);
         }
-        const data: any = await mysql.querySql(sql, paramList);
+        const data: any = await mySqlOperate.query(sql, paramList);
         let responseCode = 200;
         console.log('data', data)
         if (!data.affectedRows) {
@@ -90,7 +80,6 @@ router.post('/edit', async (req: Request, res: Response) => {
         result.error = error;
         result.message = 'There has some system error.';
     }
-    mysql.endmysql();
 });
 
 /**
@@ -98,10 +87,10 @@ router.post('/edit', async (req: Request, res: Response) => {
  * @param mysql 
  * @param userId 
  */
-const setIsDefault = async (mysql: MySqlOperate, userId: string) => {
+const setIsDefault = async (userId: string) => {
     const sql = `UPDATE car SET isDefault = 0 WHERE userId = ? AND isDefault = 1`;
     const paramList = [userId];
-    await mysql.querySql(sql, paramList);
+    await mySqlOperate.query(sql, paramList);
 }
 
 /**
@@ -110,11 +99,9 @@ const setIsDefault = async (mysql: MySqlOperate, userId: string) => {
 router.post('/delete', async (req: Request, res: Response) => {
     const sql = `DELETE FROM car WHERE id=?`;
     const paramList = [req.body.id];
-    const mysql = new MySqlOperate();
     const result = new ResponseResult();
     try {
-        await mysql.connectmysql();
-        const data: any = await mysql.querySql(sql, paramList);
+        const data: any = await mySqlOperate.query(sql, paramList);
         let resCode = 200;
         if (!data.affectedRows) {
             result.isOk = false;
@@ -127,6 +114,5 @@ router.post('/delete', async (req: Request, res: Response) => {
         result.error = error;
         result.message = 'There has some system erro.';
     }
-    mysql.endmysql();
 })
 export default router;
