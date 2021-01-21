@@ -262,8 +262,9 @@ const BillList = props => {
      * @param {*} data 
      */
     const getExlceData = async (data) => {
+        props.spinLoading(true);
         if (data?.error) {
-            openNotification({ type: constants.notifiction.type.error, message: '获取Excel内容失败' });
+            openNotification({ type: constants.notifiction.type.error, message: intl.get('BillList_msg_import_get_data_failed') });
             console.error('Error', data.error);
         } else {
             data.data.map(item => {
@@ -281,10 +282,22 @@ const BillList = props => {
                         item.payType = item.payType.slice(0, item.payType.length - 1);
                     }
                 }
-                item['userId']=currUserId;
+                item['userId'] = currUserId;
                 return item;
             });
-            await api.billRequest.import(data.data);
+
+            try {
+                const result = await api.billRequest.import(data.data);
+                if (result.isOk) {
+                    openNotification({ type: constants.notifiction.type.success, message: intl.get('BillList_msg_import_success') });
+                    searchBillRequest(new QueryParam([{ key: 'userId', value: currUserId }]));
+                } else {
+                    openNotification({ type: constants.notifiction.type.warning, message: result.message });
+                }
+            } catch (error) {
+                openNotification({ type: constants.notifiction.type.warning, message: intl.get('BillList_msg_import_failed') + error.message });
+            }
+            props.spinLoading(false);
         }
     }
 
