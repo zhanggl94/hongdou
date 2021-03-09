@@ -76,6 +76,7 @@ export const getBillTypeMap = () => {
         .set(8, '轮渡车票')
         .set(9, '维修')
         .set(10, '保养')
+        .set(11, '交通违章')
         .set(999, '其他');
 }
 
@@ -91,6 +92,7 @@ export const getPayTypeMap = () => {
         .set(5, '丰云行APP')
         .set(6, '停车券')
         .set(7,'滴滴加油')
+        .set(8, '12123APP')
         .set(999, '其他');
 }
 

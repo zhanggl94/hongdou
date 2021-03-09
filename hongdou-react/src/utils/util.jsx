@@ -47,11 +47,11 @@ export const clearJWTToken = () => localStorage.removeItem('jwtToken');
  * @param {*} format 
  */
 export const formatExcelDate = (numb, format = "/") => {
-    let time = new Date((numb - 1) * 24 * 3600000 + 1)
+    const time = new Date((numb - 1) * 24 * 3600000 + 1)
     time.setYear(time.getFullYear() - 70)
-    let year = time.getFullYear() + ''
-    let month = time.getMonth() + 1 + ''
-    let date = time.getDate() + ''
+    const year = time.getFullYear() + ''
+    const month = time.getMonth() + 1 + ''
+    const date = time.getDate() + ''
     if (format && format.length === 1) {
         return year + format + month + format + date
     }
