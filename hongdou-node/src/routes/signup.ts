@@ -3,7 +3,7 @@ import { cryPassword } from '../utils/cryptoUtil';
 import { formatDateHour24 } from '../utils/util';
 import { createToken } from '../utils/jwtUtil';
 import constants from '../utils/constants';
-import mySqlOperate from '../mysql/mysqlOperate';
+import mySqlOperate from '../db/mysqlOperate';
 import ResponResult from '../module/ResponResult';
 const router = express.Router();
 

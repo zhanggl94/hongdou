@@ -12,6 +12,7 @@ mySqlOperate.query = (sql: string, paramList: Array<any>): Promise<any> => {
                 reject(err);
             } else {
                 connection.query(sql, paramList, (err, data) => {
+                    // console.log(`sql: ${sql}, paramList: ${paramList}`); 查看执行的SQL语句
                     if (err) {
                         reject(err);
                     } else {

@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import mySqlOperate from '../mysql/mysqlOperate';
+import mySqlOperate from '../db/mysqlOperate';
 import ResponseResult from '../module/ResponResult';
 import { getQueryObject, getSplicedSQL } from '../utils/util';
 

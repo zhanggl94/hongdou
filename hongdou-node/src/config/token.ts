@@ -1,4 +1,5 @@
 export default {
-    secret:'I am a token secret.',
-    exp_time:60*60 // 单位秒
+    secret: 'I am a token secret.',
+    accessExpTime: 10, // 单位秒 accesstoken过期时间
+    refreshExpTime: 3 * 10 // 单位秒 refreshtoken过期时间
 }

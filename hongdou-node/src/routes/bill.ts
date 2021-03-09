@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import Bill from '../module/Bill';
 import ResponResult from '../module/ResponResult';
-import mySqlOperate from '../mysql/mysqlOperate';
+import mySqlOperate from '../db/mysqlOperate';
 import { getQueryObject, getSplicedSQL } from '../utils/util';
 
 const router = express.Router();

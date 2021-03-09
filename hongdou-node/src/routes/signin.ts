@@ -1,5 +1,5 @@
 import express, { Request } from 'express';
-import mySqlOperate from '../mysql/mysqlOperate';
+import mySqlOperate from '../db/mysqlOperate';
 import { cryPassword } from '../utils/cryptoUtil';
 import { createToken } from '../utils/jwtUtil';
 import { formatDateHour24 } from '../utils/util';

@@ -9,9 +9,9 @@ const auth = async (req: Request, res: Response, next: Function) => {
             next();
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
-                res.status(400).send({ isOk: false, error, message: 'Token has expired, please login agin.' });
+                res.status(401).send({ isOk: false, error, message: 'Token has expired, please login agin.' });
             } else {
-                res.status(400).send({ isOk: false, error, message: 'Token verify failed.' });
+                res.status(401).send({ isOk: false, error, message: 'Token verify failed.' });
             }
         }
     } else {
