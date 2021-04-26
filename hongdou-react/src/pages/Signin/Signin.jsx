@@ -19,8 +19,8 @@ const Signin = (props) => {
                         type: constants.notifiction.type.success,
                         message: intl.get('SigninUI_msg_signin_success')
                     });
-                    setJWTToken(data.token);
-                    props.setUser(jwtDecode(data.token));
+                    setJWTToken(data.jwtToken);
+                    props.setUser(jwtDecode(data.jwtToken));
                     props.history.push('/');
                 } else {
                     openNotification({
