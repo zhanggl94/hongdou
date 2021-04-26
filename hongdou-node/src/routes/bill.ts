@@ -12,7 +12,7 @@ const INSERT_Bill_SQL: string = `INSERT INTO bill (carId, date, billType, payTyp
  * 创建账单信息
  */
 router.post('/create', async (req: Request, res: Response) => {
-    const result: ResponResult = new ResponResult();
+    const result: ResponResult = new ResponResult(res.locals);
     const bill: Bill = req.body as Bill;
     const sql: string = INSERT_Bill_SQL + `(?,?,?,?,?,?,?,?,?,?)`;
     const paramList: Array<any> = [bill.carInfo.id, bill.date, bill.billType, bill.payType.toString(), bill.actual, bill.discount, bill.unitPrice, bill.place, bill.note, bill.userId];
@@ -37,7 +37,7 @@ router.post('/create', async (req: Request, res: Response) => {
  * 查询账单信息
  */
 router.post('/search', async (req: Request, res: Response) => {
-    const result = new ResponResult();
+    const result = new ResponResult(res.locals);
     const queryObject = getQueryObject(req.body);
     let sql = `SELECT b.*, c.name AS carName FROM bill b INNER JOIN car c ON c.id = b.carId ${getSplicedSQL(queryObject, ['b'])} `;
     try {
@@ -59,7 +59,7 @@ router.post('/search', async (req: Request, res: Response) => {
  * 账单编辑
  */
 router.post('/edit', async (req: Request, res: Response) => {
-    const result = new ResponResult();
+    const result = new ResponResult(res.locals);
     // const sql = `UPDATE FROM bill (carId, date, billType, payType, actual, discount, unitPrice, place, note, userId)
     // VALUES (?,?,?,?,?,?,?,?,?,?) WHERE id = ?`;
     const sql = `UPDATE bill SET carId = ?, date = ?, billType = ?, payType = ?, actual = ?, 
@@ -89,7 +89,7 @@ router.post('/edit', async (req: Request, res: Response) => {
  * 账单删除
  */
 router.post('/delete', async (req: Request, res: Response) => {
-    const result = new ResponResult();
+    const result = new ResponResult(res.locals);
     const sql = `DELETE FROM bill WHERE id = ?`;
     const paramList = [req.body.id];
     let resCode = 200;
@@ -114,7 +114,7 @@ router.post('/delete', async (req: Request, res: Response) => {
  * 导入数据
  */
 router.post('/import', async (req: Request, res: Response) => {
-    const result = new ResponResult();
+    const result = new ResponResult(res.locals);
     if (req.body) {
         const carList = getCarList(req.body);
         // 判断汽车信息是否存在，存在查询汽车信息的id，不存在新建汽车信息，并获取id
@@ -130,7 +130,6 @@ router.post('/import', async (req: Request, res: Response) => {
                     } else {
                         // name,brand,isDefault,note, userId
                         const newCarData = await insertCar([carName, 9999, 0, 'Excle import', currUserId]);
-                        console.log('newCarData', newCarData);
                         car['id'] = newCarData.insertId;
                     }
                 } catch (error) {
@@ -157,8 +156,6 @@ router.post('/import', async (req: Request, res: Response) => {
             if (excelInsertSQL.endsWith(',')) {
                 excelInsertSQL = excelInsertSQL.slice(0, excelInsertSQL.length - 1);
             }
-            console.log('excelIn', excelInsertSQL);
-            console.log('paramList', paramList);
             try {
                 const data: any = await mySqlOperate.query(excelInsertSQL, paramList);
                 if (!data.affectedRows) {

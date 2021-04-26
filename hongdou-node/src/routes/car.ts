@@ -9,7 +9,7 @@ const router = express.Router();
  * 创建汽车信息
  */
 router.post('/create', async (req: Request, res: Response) => {
-    const result = new ResponseResult();
+    const result = new ResponseResult(res.locals);
     const sql = `INSERT INTO car (name,brand,isDefault,note, userId) VALUES (?,?,?,?,?)`;
     const paramList = [req.body.name, req.body.brand, req.body.isDefault, req.body.note, req.body.userId];
     try {
@@ -36,7 +36,7 @@ router.post('/create', async (req: Request, res: Response) => {
  * 查询汽车信息
  */
 router.post('/search', async (req: Request, res: Response) => {
-    const result = new ResponseResult();
+    const result = new ResponseResult(res.locals);
     const queryObject = getQueryObject(req.body);
 
     let sql = `SELECT * FROM car c WHERE 1=1 ` + getSplicedSQL(queryObject,['c']);
@@ -45,6 +45,7 @@ router.post('/search', async (req: Request, res: Response) => {
         if (data.length) {
             result.data = data;
         }
+        
         res.send(result);
     } catch (error) {
         result.isOk = false;
@@ -58,7 +59,7 @@ router.post('/search', async (req: Request, res: Response) => {
  * 更新汽车信息
  */
 router.post('/edit', async (req: Request, res: Response) => {
-    const result = new ResponseResult();
+    const result = new ResponseResult(res.locals);
     const sql = `UPDATE car SET name = ?, brand = ?, isDefault = ?, note = ? WHERE id = ? AND userId = ?`;
     const body = req.body;
     const paramList = [body.name, body.brand, body.isDefault, body.note, body.id, body.userId];
@@ -68,7 +69,6 @@ router.post('/edit', async (req: Request, res: Response) => {
         }
         const data: any = await mySqlOperate.query(sql, paramList);
         let responseCode = 200;
-        console.log('data', data)
         if (!data.affectedRows) {
             result.isOk = false;
             result.message = 'Update car failed.';
@@ -99,7 +99,7 @@ const setIsDefault = async (userId: string) => {
 router.post('/delete', async (req: Request, res: Response) => {
     const sql = `DELETE FROM car WHERE id=?`;
     const paramList = [req.body.id];
-    const result = new ResponseResult();
+    const result = new ResponseResult(res.locals);
     try {
         const data: any = await mySqlOperate.query(sql, paramList);
         let resCode = 200;

@@ -4,4 +4,11 @@ export default class ResponResult {
     public message: string = '';
     public data: any;
     public jwtToken: string = '';
+    public isRefreshClientToken: boolean = false;
+    public jwtRefreshToken: string = '';
+
+    constructor(locals: any) {
+        this.isRefreshClientToken = locals.isRefreshClientToken;
+        this.jwtRefreshToken = locals.jwtToken;
+    }
 }

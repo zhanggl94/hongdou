@@ -7,8 +7,13 @@ import mySqlOperate from '../db/mysqlOperate';
 import ResponResult from '../module/ResponResult';
 const router = express.Router();
 
+const notRefreshToken = {
+    isRefreshClientToken: false,
+    newToken: ''
+};
+
 router.post('/signup', async (req: Request, res: Response) => {
-    let result: ResponResult = new ResponResult();
+    let result: ResponResult = new ResponResult(notRefreshToken);
     try {
         result = await isUserExist(req); // 判断用户是否重复
         if (!result.isOk) {
@@ -36,7 +41,7 @@ router.post('/signup', async (req: Request, res: Response) => {
  * @param mysql 
  */
 const isUserExist = async (req: Request) => {
-    const result = new ResponResult();
+    const result = new ResponResult(notRefreshToken);
     const sql = `select id from user where username = ?`;
     const paramList: Array<string> = [req.body.username];
     try {
@@ -62,7 +67,7 @@ const isUserExist = async (req: Request) => {
  * @param mysql 数据库操作对象
  */
 const createUser = async (req: Request,) => {
-    const result = new ResponResult();
+    const result = new ResponResult(notRefreshToken);
     const currentDateTime = formatDateHour24(new Date(), constants.time_zone_zh_cn);
     console.log('curr', currentDateTime);
     const sql = `INSERT INTO user VALUES (null,?,?,?,?)`;
