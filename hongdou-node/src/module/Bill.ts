@@ -10,5 +10,5 @@ export default class Bill {
     public unitPrice = 0; // 单价
     public place = ''; // 地点
     public note = ''; // 备注
-    public userId; // 用户Id
+    public userId = ''; // 用户Id
 } 

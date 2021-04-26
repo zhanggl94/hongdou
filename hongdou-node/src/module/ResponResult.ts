@@ -9,6 +9,6 @@ export default class ResponResult {
 
     constructor(locals: any) {
         this.isRefreshClientToken = locals.isRefreshClientToken;
-        this.jwtRefreshToken = locals.jwtToken;
+        this.jwtRefreshToken = locals.jwtRefreshToken;
     }
 }

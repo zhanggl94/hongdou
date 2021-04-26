@@ -4,6 +4,7 @@ import { cryPassword } from '../utils/cryptoUtil';
 import { createToken } from '../utils/jwtUtil';
 import { formatDateHour24 } from '../utils/util';
 import constants from '../utils/constants';
+import ResponResult from '../module/ResponResult';
 
 const router = express.Router();
 
@@ -21,12 +22,11 @@ router.post('/signin', async (req, res) => {
 })
 
 const isUserExist = async (req: Request) => {
-    const result = {
-        isOk: true,
-        error: {},
-        message: '',
-        token: ''
-    }
+    const notRefreshToken = {
+        isRefreshClientToken: false,
+        refreshToken: ''
+    };
+    const result = new ResponResult(notRefreshToken);
     const sql = `SELECT id, password, createtime FROM user WHERE username = ?`;
     const paramList = [req.body.username];
     try {
@@ -35,7 +35,7 @@ const isUserExist = async (req: Request) => {
             const { id, password, createtime } = data[0];
             if (password === cryPassword(req.body.password, formatDateHour24(createtime, constants.time_zone_zh_cn))) {
                 result.isOk = true;
-                result.token = createToken({ username: req.body.username, userid: id });
+                result.jwtToken = createToken({ username: req.body.username, userid: id });
                 const updateSql = `UPDATE user SET lastlogintime = ? where id = ?`;
                 const updateParamList = [formatDateHour24(new Date(), constants.time_zone_zh_cn), id];
                 mySqlOperate.query(updateSql, updateParamList);

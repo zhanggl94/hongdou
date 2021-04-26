@@ -11,7 +11,7 @@ const auth = async (req: Request, res: Response, next: Function) => {
             if (result.isRefreshClientToken) {
                 res.locals = {
                     isRefreshClientToken: result.isRefreshClientToken,
-                    newToken: result.newToken
+                    jwtRefreshToken: result.data
                 };
             }
             next();

@@ -30,15 +30,15 @@ export const verifyToken = (token: string) => {
                     // 需要解析出token中的信息并重新生成token
                     const tokenJSON: any = jwt.decode(token);
                     if (await isRefreshTokenExist(tokenJSON.username)) {
-                        const newToken = createToken({ username: tokenJSON.username, userid: tokenJSON.userid });
-                        resolve({ isRefreshClientToken: true, newToken });
+                        const jwtRefreshToken = createToken({ username: tokenJSON.username, userid: tokenJSON.userid });
+                        resolve({ isRefreshClientToken: true, data: jwtRefreshToken });
                     } else {
                         reject(err);
                     }
                 }
                 reject(err);
             } else {
-                resolve(data);
+                resolve({ isRefresClientToken: false, data: data });
             }
         });
     });

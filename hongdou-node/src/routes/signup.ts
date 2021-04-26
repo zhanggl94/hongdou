@@ -9,7 +9,7 @@ const router = express.Router();
 
 const notRefreshToken = {
     isRefreshClientToken: false,
-    newToken: ''
+    refreshToken: ''
 };
 
 router.post('/signup', async (req: Request, res: Response) => {
