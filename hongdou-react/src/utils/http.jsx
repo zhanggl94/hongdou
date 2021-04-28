@@ -24,7 +24,7 @@ export const getData = (url, options = {}) => {
 }
 
 /**
- * 以POST的方式嗲用Fetch
+ * 以POST的方式掉用Fetch
  * @param {*} url 
  * @param {*} data 
  * @param {*} options 
